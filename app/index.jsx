@@ -1,17 +1,30 @@
 import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
+import { Image, ScrollView, Text, View } from "react-native";
 import { Link } from "expo-router";
-
+import { SafeAreaView } from "react-native-safe-area-context";
+import { icons } from "../constants";
+import OnBoarding from "../components/OnBoarding";
 export default function App() {
   return (
-    <View className="flex-1 items-center justify-center bg-white">
-      <Text className="text-3xl text-blue-light font-manropeExtraBold">
-        Hello World !!
-      </Text>
-      <StatusBar style="auto" />
-      <Link href="/overview" style={{ color: "blue" }}>
-        overview
-      </Link>
-    </View>
+    // Onboarding screen
+    <SafeAreaView className="bg-bgColor-secondary h-full">
+      <StatusBar style="light" />
+      <ScrollView
+        contentContainerStyle={{
+          height: "100%",
+        }}
+      >
+        <View className="flex flex-col items-center  h-full w-full ">
+          {/* logo and name */}
+          <View className="flex flex-row gap-2 items-center">
+            <Image source={icons.logo} resizeMode="contain" />
+            <Text className="text-2xl font-manropeBold text-blue-text">
+              Fitness
+            </Text>
+          </View>
+          <OnBoarding />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
