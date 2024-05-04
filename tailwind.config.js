@@ -18,6 +18,13 @@ module.exports = {
       },
       fontFamily: {
         manrope: ["Manrope", "sans-serif"],
+        manropeSemiBold: ["ManropeSemiBold", "sans-serif"],
+        manropeBold: ["ManropeBold", "sans-serif"],
+        manropeExtraBold: ["ManropeExtraBold", "sans-serif"],
+        manropeLight: ["ManropeLight", "sans-serif"],
+        manropeExtraLight: ["ManropeExtraLight", "sans-serif"],
+        manropeMedium: ["ManropeMedium", "sans-serif"],
+        manroperegular: ["ManropeRegular", "sans-serif"],
       },
     },
   },
