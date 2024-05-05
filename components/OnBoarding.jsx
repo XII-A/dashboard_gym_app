@@ -4,6 +4,7 @@ import slides from "../constants/slides";
 import OnBoardingItem from "./OnBoardingItem";
 import Paginator from "./Paginator";
 import NextButton from "./NextButton";
+import { Redirect, router } from "expo-router";
 const OnBoarding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -18,7 +19,7 @@ const OnBoarding = () => {
     if (currentIndex < slides.length - 1) {
       slideRef.current.scrollToIndex({ index: currentIndex + 1 });
     } else {
-      console.log("Last item");
+      router.push("/log-in");
     }
   };
 

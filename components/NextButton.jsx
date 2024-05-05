@@ -48,7 +48,7 @@ const NextButton = ({ percentage, scrollTo }) => {
             cx={center}
             cy={center}
             r={radius}
-            stroke="#6b7280d9"
+            stroke="#9ca3afd9"
             strokeWidth={strokeWidth}
           />
           <Circle

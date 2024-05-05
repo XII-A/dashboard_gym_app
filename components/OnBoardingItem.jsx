@@ -14,7 +14,7 @@ const OnBoardingItem = ({ item }) => {
         <Text className="text-3xl font-manropeBold text-blue-text mb-2 text-center">
           {item.title}
         </Text>
-        <Text className="text-lg text-center text-gray-500">
+        <Text className="text-lg text-center text-gray-400">
           {item.description}
         </Text>
       </View>
