@@ -23,6 +23,7 @@ const FormField = ({
           onChangeText={handleChange}
           secureTextEntry={title === "Password" && !showPassword}
           keyboardType={keyboardType}
+          autoCapitalize="none"
         />
         {title === "Password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
