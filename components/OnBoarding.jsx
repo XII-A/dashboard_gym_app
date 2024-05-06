@@ -5,6 +5,7 @@ import OnBoardingItem from "./OnBoardingItem";
 import Paginator from "./Paginator";
 import NextButton from "./NextButton";
 import { Redirect, router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const OnBoarding = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
@@ -15,11 +16,16 @@ const OnBoarding = () => {
 
   const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
 
-  const scrollTo = () => {
+  const scrollTo = async () => {
     if (currentIndex < slides.length - 1) {
       slideRef.current.scrollToIndex({ index: currentIndex + 1 });
     } else {
-      router.push("/log-in");
+      try {
+        await AsyncStorage.setItem("@viewedOnboarding", "true");
+        router.push("/log-in");
+      } catch (err) {
+        console.log("error in set item", err);
+      }
     }
   };
 

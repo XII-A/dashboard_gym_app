@@ -1,19 +1,36 @@
-import { View, Text, ScrollView, Image } from "react-native";
+import { View, Text, ScrollView, Image, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { icons } from "../../constants";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
+import { useAuth } from "../context/AuthContext";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const LogIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const handleLogIn = () => {};
+  const { onLogin } = useAuth();
+  const handleLogIn = async () => {
+    setIsLoading(true);
+    try {
+      const res = await onLogin(email, password);
+      if (res?.data) {
+        router.replace("/overview");
+      } else {
+        throw new Error("");
+      }
+    } catch (error) {
+      Alert.alert("Email or Password is incorrect");
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <SafeAreaView className="bg-bgColor-secondary h-full">
-      <ScrollView>
+      <KeyboardAwareScrollView extraHeight={300}>
         <View className="w-full justify-center  min-h-[83vh] px-4 my-6 flex flex-col ">
           {/* logo and app name */}
           <View className="flex flex-row gap-2 items-center">
@@ -62,7 +79,7 @@ const LogIn = () => {
             </Link>
           </View>
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     </SafeAreaView>
   );
 };
