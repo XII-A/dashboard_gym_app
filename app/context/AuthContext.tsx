@@ -5,14 +5,36 @@ import * as SecureStore from "expo-secure-store";
 
 interface AuthProps {
   authState?: { token: string | null; authenticated: boolean | null };
+  authLoading?: boolean;
+  user?: {
+    id: number;
+    username: string;
+    email: string;
+    provider: string;
+    confirmed: boolean;
+    blocked: boolean;
+    created_at: string;
+    updated_at: string;
+    name: string;
+    surname: string;
+    birthday: string;
+    weight: number;
+    user_id: string;
+    profilepicUrl: string;
+    height: number;
+    caloriesGoal: number | string;
+    workoutsGoal: number | string;
+    stepsGoal: number | string;
+    waterGoal: number | string;
+  } | null;
   onRegister?: (email: string, password: string) => Promise<void>;
   onLogin?: (email: string, password: string) => Promise<void>;
   onLogout?: () => Promise<void>;
-  authLoading?: boolean;
 }
 
 const TOKEN_KEY = "my-jwt";
-export const API_URL = "http:/192.168.1.101:1337/api";
+// CHANGE 192.168.1.101 to your own ip address if the backend doesnt work
+export const API_URL = "http://192.168.1.101:1337/api";
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
@@ -28,6 +50,7 @@ export const AuthProvider = ({ children }: any) => {
     authenticated: null,
   });
   const [authLoading, setAuthLoading] = useState(true);
+  const [user, setUser] = useState(null);
   //   useEffect(() => {
   //     console.log("the auth state in context: ", authState);
   //   }, [authState]);
@@ -39,6 +62,15 @@ export const AuthProvider = ({ children }: any) => {
         if (token) {
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           setAuthState({ token: token, authenticated: true });
+          const getUser = await axios({
+            url: `${API_URL}/users/me`,
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          setUser(getUser.data);
           setAuthLoading(false);
         } else {
           setAuthLoading(false);
@@ -63,7 +95,7 @@ export const AuthProvider = ({ children }: any) => {
   const login = async (email: string, password: string) => {
     try {
       const res = await axios({
-        url: "http://192.168.1.101:1337/api/auth/local",
+        url: `${API_URL}/auth/local`,
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -107,6 +139,7 @@ export const AuthProvider = ({ children }: any) => {
     onLogout: logout,
     authState,
     authLoading,
+    user,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

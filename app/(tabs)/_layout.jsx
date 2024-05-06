@@ -1,8 +1,6 @@
-import { StatusBar } from "expo-status-bar";
-import { Redirect, Tabs } from "expo-router";
+import { Tabs } from "expo-router";
 import { Image, Text, View } from "react-native";
 import { icons } from "../../constants";
-
 // import overview from "../../assets/icons/overview.png";
 const TabIcon = ({ icon, color, name, focused }) => {
   return (
@@ -33,7 +31,7 @@ const TabsLayout = () => {
             backgroundColor: "#0D1013",
             borderTopWidth: 1,
             borderTopColor: "#0D1013",
-            height: 84,
+            height: 85,
           },
           tabBarShowLabel: false,
           tabBarActiveTintColor: "#00A8E8",
@@ -103,6 +101,23 @@ const TabsLayout = () => {
                   color={color}
                   focused={focused}
                   name="Progress"
+                />
+              );
+            },
+          }}
+        />
+        <Tabs.Screen
+          name="profile"
+          options={{
+            title: "profile",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => {
+              return (
+                <TabIcon
+                  icon={icons.person}
+                  color={color}
+                  focused={focused}
+                  name="Profile"
                 />
               );
             },
