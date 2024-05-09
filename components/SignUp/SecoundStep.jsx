@@ -41,12 +41,14 @@ const ImageViewer = ({ src }) => {
   );
 };
 
-const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
+const SecoundStep = ({ formValues, setFromValues, gyms }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
 
   const [selectedLanguage, setSelectedLanguage] = useState();
+
+  const gymOptions = gyms.map((gym) => gym.attributes.name);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -120,45 +122,7 @@ const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
   const handleOpenActionSheet = () => {
     ActionSheetIOS.showActionSheetWithOptions(
       {
-        options: [
-          "cancel",
-          "game gym",
-          "insane gym",
-          "star gym",
-          "game gym",
-          "insane gym",
-          "star gym",
-          "insane gym",
-          "star gym",
-          "game gym",
-          "insane gym",
-          "star gym",
-          "insane gym",
-          "star gym",
-          "game gym",
-          "insane gym",
-          "star gym",
-          "insane gym",
-          "star gym",
-          "game gym",
-          "insane gym",
-          "star gym",
-          "insane gym",
-          "star gym",
-          "game gym",
-          "insane gym",
-          "star gym",
-          "insane gym",
-          "star gym",
-          "game gym",
-          "insane gym",
-          "star gym",
-          "insane gym",
-          "star gym",
-          "game gym",
-          "insane gym",
-          "star gym",
-        ],
+        options: ["Cancel", ...gymOptions],
         cancelButtonIndex: 0,
         userInterfaceStyle: "dark",
         title: "Select your gym",
@@ -170,7 +134,8 @@ const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
           setFromValues((prev) => {
             return {
               ...prev,
-              gymId: buttonIndex,
+              gymId: gyms[buttonIndex - 1].id,
+              gymName: gyms[buttonIndex - 1].attributes.name,
             };
           });
         }
@@ -301,7 +266,7 @@ const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
         <FormField
           title={"Gym"}
           formType={"ActionSheetIOS"}
-          value={formValues.gymId}
+          value={formValues.gymName}
           onPress={handleOpenActionSheet}
           otherStyles="mt-4"
           placeholder={"Select your gym"}

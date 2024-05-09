@@ -119,14 +119,17 @@ const FormField = ({
       );
 
     case "Picker":
-      const pickerRef = useRef();
+      const pickerRef = useRef(null);
       return (
         <View className={`space-y-2 ${otherStyles}`}>
           <Text className="text-base text-white font-manropeMedium">
             {title}
           </Text>
-          <TouchableOpacity onPress={() => pickerRef.current.focus()}>
-            <View className="flex flex-row bg-white/5 text-white/90 shadow-sm border border-white/10 h-16 rounded-lg focus:border-blue-default items-center">
+          <TouchableOpacity
+            onPress={() => pickerRef.current?.focus?.()}
+            className="z-50"
+          >
+            <View className="flex flex-row bg-white/5 text-white/90 shadow-sm border border-white/10 h-16 rounded-lg focus:border-blue-default items-center z-10">
               <Picker
                 ref={pickerRef}
                 selectedValue={value}

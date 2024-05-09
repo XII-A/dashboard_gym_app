@@ -18,6 +18,28 @@ import FirstStep from "../../components/SignUp/FirstStep";
 import SecoundStep from "../../components/SignUp/SecoundStep";
 
 const SignUp = () => {
+  const [gyms, setGyms] = useState([]);
+  useEffect(() => {
+    axios({
+      url: `${process.env.EXPO_PUBLIC_API_URL}/gyms`,
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        setGyms(res.data.data);
+      })
+      .catch((err) => {
+        console.log("Something went wrong in getting gyms: ", err);
+      });
+  }, []);
+
+  useEffect(() => {
+    console.log("-------------------------------\n");
+    console.log("the gyms are: ", gyms);
+  }, [gyms]);
+
   const [formValues, setFromValues] = useState({
     email: null,
     password: null,
@@ -27,6 +49,7 @@ const SignUp = () => {
     weight: null,
     height: null,
     gymId: null,
+    gymName: null,
     birthDate: null,
     stepsGoal: null,
     caloriesGoal: null,
@@ -87,6 +110,7 @@ const SignUp = () => {
             <SecoundStep
               formValues={formValues}
               setFromValues={setFromValues}
+              gyms={gyms}
             />
           )}
         </View>
