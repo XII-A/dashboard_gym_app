@@ -6,7 +6,7 @@ import {
   Platform,
   Modal,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import Feather from "@expo/vector-icons/Feather";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -65,7 +65,6 @@ const FormField = ({
                   <TouchableOpacity
                     onPress={() => {
                       setShowDatePicker(false);
-                      // format the date so its dd/mm/yyyy
                       handleChange(
                         date
                           .toLocaleDateString("en-GB")
@@ -87,50 +86,80 @@ const FormField = ({
                     const currentDate = selectedDate;
                     setDate(currentDate);
                   }}
+                  maximumDate={new Date()}
                 />
               </View>
             </Modal>
+          )}
+          {showDatePicker && Platform.OS === "android" && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="spinner"
+              onChange={(event, selectedDate) => {
+                if (event.type === "set") {
+                  const currentDate = selectedDate;
+                  setShowDatePicker(false);
+                  setDate(currentDate);
+                  handleChange(
+                    currentDate
+                      .toLocaleDateString("en-GB")
+                      .split("/")
+                      .reverse()
+                      .join("-")
+                  );
+                } else {
+                  setShowDatePicker(false);
+                }
+              }}
+              maximumDate={new Date()}
+            />
           )}
         </View>
       );
 
     case "Picker":
+      const pickerRef = useRef();
       return (
         <View className={`space-y-2 ${otherStyles}`}>
           <Text className="text-base text-white font-manropeMedium">
             {title}
           </Text>
-          <View className="flex flex-row bg-white/5 text-white/90 shadow-sm border border-white/10 h-16 rounded-lg focus:border-blue-default items-center px-0">
-            <Picker
-              selectedValue={value}
-              onValueChange={handleChange}
-              style={{
-                color: `${value ? "white" : "#64748bd9"}`,
-                width: "100%",
-                padding: 0,
-              }}
-              dropdownIconColor={"white"}
-              selectionColor={"white"}
-              placeholder="Select an option"
-            >
-              <Picker.Item
-                label={placeholder}
-                value={null}
-                enabled={false}
-                color="#00A8E8"
-              />
-              {rest.options.map((option) => {
-                return (
-                  <Picker.Item
-                    key={option}
-                    label={option}
-                    value={option}
-                    color="#000"
-                  />
-                );
-              })}
-            </Picker>
-          </View>
+          <TouchableOpacity onPress={() => pickerRef.current.focus()}>
+            <View className="flex flex-row bg-white/5 text-white/90 shadow-sm border border-white/10 h-16 rounded-lg focus:border-blue-default items-center">
+              <Picker
+                ref={pickerRef}
+                selectedValue={value}
+                onValueChange={handleChange}
+                style={{
+                  color: `${value ? "white" : "#64748bd9"}`,
+                  width: "100%",
+                  padding: 0,
+                }}
+                dropdownIconColor={"white"}
+                selectionColor={"white"}
+                placeholder="Select an option"
+                mode="dropdown"
+              >
+                <Picker.Item
+                  label={placeholder}
+                  value={null}
+                  enabled={false}
+                  color="#00A8E8"
+                />
+                {rest.options.map((option) => {
+                  return (
+                    <Picker.Item
+                      key={option}
+                      label={option}
+                      value={option}
+                      color="#000"
+                    />
+                  );
+                })}
+              </Picker>
+            </View>
+          </TouchableOpacity>
         </View>
       );
     case "ActionSheetIOS":

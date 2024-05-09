@@ -97,7 +97,25 @@ const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
     }
   };
 
-  const options = ["game gym", "insane gym", "star gym"];
+  const options = [
+    "game gym",
+    "insane gym",
+    "star gym",
+    "game gym",
+    "insane gym",
+    "star gym",
+    "game gym",
+    "insane gym",
+    "star gym",
+    "insane gym",
+    "star gym",
+    "game gym",
+    "insane gym",
+    "star gym",
+    "insane gym",
+    "star gym",
+    "game gym",
+  ];
 
   const handleOpenActionSheet = () => {
     ActionSheetIOS.showActionSheetWithOptions(
