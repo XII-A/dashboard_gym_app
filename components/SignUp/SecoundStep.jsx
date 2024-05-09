@@ -1,4 +1,12 @@
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  TouchableOpacity,
+  ActionSheetIOS,
+  Platform,
+  Button,
+} from "react-native";
 import React, { useState } from "react";
 import FormField from "../FormField";
 import CustomButton from "../CustomButton";
@@ -6,20 +14,21 @@ import { Link } from "expo-router";
 import { icons } from "../../constants";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as ImagePicker from "expo-image-picker";
-import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { storage } from "../../firebaseConfig";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { ref } from "firebase/storage";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const ImageViewer = ({ src }) => {
   // console.log("the src is: ", src);
   return (
-    <View className="flex justify-center items-center bg-bgColor-trinary border border-white/40 rounded-full w-36 h-36">
+    <View className="flex justify-center items-center bg-white/5 border border-white/10 rounded-full w-36 h-36">
       {src == null ? (
         <Image
           source={icons.person}
           resizeMode="contain"
           className="w-20 h-20"
+          tintColor={"#64748bd9"}
         />
       ) : (
         <Image
@@ -36,6 +45,8 @@ const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedLanguage, setSelectedLanguage] = useState();
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -86,6 +97,69 @@ const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
     }
   };
 
+  const options = ["game gym", "insane gym", "star gym"];
+
+  const handleOpenActionSheet = () => {
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options: [
+          "cancel",
+          "game gym",
+          "insane gym",
+          "star gym",
+          "game gym",
+          "insane gym",
+          "star gym",
+          "insane gym",
+          "star gym",
+          "game gym",
+          "insane gym",
+          "star gym",
+          "insane gym",
+          "star gym",
+          "game gym",
+          "insane gym",
+          "star gym",
+          "insane gym",
+          "star gym",
+          "game gym",
+          "insane gym",
+          "star gym",
+          "insane gym",
+          "star gym",
+          "game gym",
+          "insane gym",
+          "star gym",
+          "insane gym",
+          "star gym",
+          "game gym",
+          "insane gym",
+          "star gym",
+          "insane gym",
+          "star gym",
+          "game gym",
+          "insane gym",
+          "star gym",
+        ],
+        cancelButtonIndex: 0,
+        userInterfaceStyle: "dark",
+        title: "Select your gym",
+      },
+      (buttonIndex) => {
+        if (buttonIndex === 0) {
+          // cancel action
+        } else {
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              gymId: buttonIndex,
+            };
+          });
+        }
+      }
+    );
+  };
+
   return (
     <View className="">
       <View className="w-full flex justify-center items-center relative ">
@@ -101,22 +175,153 @@ const SecoundStep = ({ formValues, setFromValues, handleInitSignUp }) => {
           </TouchableOpacity>
         </View>
       </View>
-      {/* button to upload image */}
-      <TouchableOpacity
-        onPress={async () => {
-          const downloadUrl = await uploadImage(
-            selectedImage,
-            formValues.email,
-            setIsLoading
-          );
-          // console.log("the download url is outside: ", downloadUrl);
-        }}
-        className="flex justify-center items-center mt-4"
-      >
-        <Text className="text-blue-default font-manropeBold text-lg">
-          Upload Image
-        </Text>
-      </TouchableOpacity>
+      <FormField
+        title={"First Name"}
+        value={formValues.firstName}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              firstName: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"John"}
+      />
+      <FormField
+        title={"Last Name"}
+        value={formValues.lastName}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              lastName: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"Doe"}
+      />
+      <FormField
+        title={"Weight (kg)"}
+        value={formValues.weight}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              weight: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"70"}
+        inputMode={"numeric"}
+      />
+      <FormField
+        title={"Height (cm)"}
+        value={formValues.height}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              height: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"170"}
+        inputMode={"numeric"}
+      />
+      <FormField
+        title={"Steps Goal"}
+        value={formValues.stepsGoal}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              stepsGoal: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"10000"}
+        inputMode={"numeric"}
+      />
+      <FormField
+        title={"Calories Goal"}
+        value={formValues.caloriesGoal}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              caloriesGoal: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"2000"}
+        inputMode={"numeric"}
+      />
+      <FormField
+        title={"Workout Goal"}
+        value={formValues.workoutGoal}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              workoutGoal: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"4 hours"}
+        inputMode={"numeric"}
+      />
+      {/* gym picker */}
+      {Platform.OS === "ios" && (
+        <FormField
+          title={"Gym"}
+          formType={"ActionSheetIOS"}
+          value={formValues.gymId}
+          onPress={handleOpenActionSheet}
+          otherStyles="mt-4"
+          placeholder={"Select your gym"}
+        />
+      )}
+      {Platform.OS === "android" && (
+        <FormField
+          title={"Gym"}
+          formType={"Picker"}
+          value={formValues.gymId}
+          placeholder={"Select your gym"}
+          handleChange={(e) =>
+            setFromValues((prev) => {
+              return {
+                ...prev,
+                gymId: e,
+              };
+            })
+          }
+          options={options}
+          otherStyles="mt-4"
+        />
+      )}
+      <FormField
+        title={"Date of Birth"}
+        formType={"DatePicker"}
+        value={formValues.birthDate}
+        handleChange={(e) =>
+          setFromValues((prev) => {
+            return {
+              ...prev,
+              birthDate: e,
+            };
+          })
+        }
+        otherStyles="mt-4"
+        placeholder={"Select your birth date"}
+      />
     </View>
   );
 };

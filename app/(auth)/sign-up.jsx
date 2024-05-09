@@ -22,8 +22,17 @@ const SignUp = () => {
     email: null,
     password: null,
     confirmPassword: null,
+    firstName: null,
+    lastName: null,
+    weight: null,
+    height: null,
+    gymId: null,
+    birthDate: null,
+    stepsGoal: null,
+    caloriesGoal: null,
+    workoutGoal: null,
   });
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(2);
   const handleInitSignUp = async () => {
     // checking if the email exists or not first before taking the user to the next step
     try {
@@ -50,7 +59,7 @@ const SignUp = () => {
   };
   return (
     <SafeAreaView className="bg-bgColor-secondary h-full">
-      <KeyboardAwareScrollView extraHeight={300}>
+      <KeyboardAwareScrollView extraScrollHeight={128}>
         <View className="w-full justify-center  min-h-[83vh] px-4 my-6 flex flex-col ">
           {/* logo and app name */}
           <View className="flex flex-row gap-2 items-center justify-center">

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Stack, SplashScreen } from "expo-router";
 import { useFonts } from "expo-font";
 import { AuthProvider } from "./context/AuthContext";
+import "react-native-reanimated";
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
@@ -35,7 +36,6 @@ const RootLayout = () => {
           options={{
             headerShown: false,
           }}
-          
         />
         <Stack.Screen
           name="(auth)"
