@@ -34,7 +34,7 @@ interface AuthProps {
 
 const TOKEN_KEY = "my-jwt";
 // CHANGE 192.168.1.101 to your own ip address if the backend doesnt work
-export const API_URL = "http://192.168.1.101:1337/api";
+export const API_URL = `${process.env.EXPO_PUBLIC_API_URL}`;
 const AuthContext = createContext<AuthProps>({});
 
 export const useAuth = () => {
