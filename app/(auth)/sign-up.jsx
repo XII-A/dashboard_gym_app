@@ -35,11 +35,6 @@ const SignUp = () => {
       });
   }, []);
 
-  useEffect(() => {
-    console.log("-------------------------------\n");
-    console.log("the gyms are: ", gyms);
-  }, [gyms]);
-
   const [formValues, setFromValues] = useState({
     email: null,
     password: null,
@@ -55,6 +50,7 @@ const SignUp = () => {
     caloriesGoal: null,
     workoutGoal: null,
   });
+
   const [currentStep, setCurrentStep] = useState(2);
   const handleInitSignUp = async () => {
     // checking if the email exists or not first before taking the user to the next step

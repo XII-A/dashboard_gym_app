@@ -265,11 +265,19 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
       {Platform.OS === "ios" && (
         <FormField
           title={"Gym"}
-          formType={"ActionSheetIOS"}
+          formType={"Picker"}
           value={formValues.gymName}
-          onPress={handleOpenActionSheet}
+          handleChange={(e) =>
+            setFromValues((prev) => {
+              return {
+                ...prev,
+                gymName: e,
+              };
+            })
+          }
           otherStyles="mt-4"
           placeholder={"Select your gym"}
+          options={gymOptions}
         />
       )}
       {Platform.OS === "android" && (
