@@ -1,26 +1,24 @@
 import {
   View,
-  Text,
   Image,
   TouchableOpacity,
   ActionSheetIOS,
   Platform,
-  Button,
+  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import FormField from "../FormField";
 import CustomButton from "../CustomButton";
-import { Link } from "expo-router";
+import { router } from "expo-router";
 import { icons } from "../../constants";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as ImagePicker from "expo-image-picker";
 import { storage } from "../../firebaseConfig";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { ref } from "firebase/storage";
-import DateTimePicker from "@react-native-community/datetimepicker";
+import axios from "axios";
 
 const ImageViewer = ({ src }) => {
-  // console.log("the src is: ", src);
   return (
     <View className="flex justify-center items-center bg-white/5 border border-white/10 rounded-full w-36 h-36">
       {src == null ? (
@@ -41,12 +39,10 @@ const ImageViewer = ({ src }) => {
   );
 };
 
-const SecoundStep = ({ formValues, setFromValues, gyms }) => {
+const SecoundStep = ({ formValues, setFromValues, gyms, onLogin }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
-
-  const [selectedLanguage, setSelectedLanguage] = useState();
 
   const gymOptions = gyms.map((gym) => gym.attributes.name);
 
@@ -58,8 +54,6 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
       quality: 0.2,
     });
 
-    // console.log("the result of the image picker is", result);
-
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
     }
@@ -67,7 +61,6 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
 
   const uploadImage = async (uri, userEmail, setIsLoading) => {
     try {
-      console.log("the selected image uri is: ", uri);
       setIsLoading(true);
       const blob = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -82,7 +75,6 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
         xhr.open("GET", uri, true);
         xhr.send(null);
       });
-      // console.log("the blob is: ", blob);
       const imageRef = ref(storage, `ProfilePics/${userEmail}`);
       const downloadUrl = await uploadBytes(imageRef, blob).then(
         async (snapshot) => {
@@ -90,7 +82,6 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
           return url;
         }
       );
-      // console.log("the download url is: ", downloadUrl);
       return downloadUrl;
     } catch (err) {
       console.log("error uploading image: ", err);
@@ -99,25 +90,66 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
     }
   };
 
-  const options = [
-    "game gym",
-    "insane gym",
-    "star gym",
-    "game gym",
-    "insane gym",
-    "star gym",
-    "game gym",
-    "insane gym",
-    "star gym",
-    "insane gym",
-    "star gym",
-    "game gym",
-    "insane gym",
-    "star gym",
-    "insane gym",
-    "star gym",
-    "game gym",
-  ];
+  const handleFinishSignUp = async () => {
+    setIsLoading(true);
+    try {
+      const imageUrl = await uploadImage(
+        selectedImage,
+        formValues.email,
+        setIsLoading
+      );
+      setFromValues((prev) => {
+        return {
+          ...prev,
+          profilePic: imageUrl,
+        };
+      });
+      const user = {
+        email: formValues.email,
+        password: formValues.password,
+        name: formValues.firstName,
+        surname: formValues.lastName,
+        birthday: formValues.birthDate,
+        weight: formValues.weight,
+        height: formValues.height,
+        gym: formValues.gymId,
+        profilepicUrl: imageUrl,
+        username: formValues.email,
+        stepsGoal: formValues.stepsGoal,
+        caloriesGoal: formValues.caloriesGoal,
+        workoutsGoal: formValues.workoutGoal,
+        waterGoal: 0,
+      };
+
+      const jsonUser = JSON.stringify(user);
+      const res = await axios({
+        url: `${process.env.EXPO_PUBLIC_API_URL}/auth/local/register`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: jsonUser,
+      })
+        .then((res) => {
+          // log in the user after signing up then redirect to the overview page
+          onLogin(formValues.email, formValues.password);
+          router.replace("/overview");
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(
+            "error in finishing sign up .catch: ",
+            err.response.data.error.message
+          );
+          Alert.alert(err.response.data.error.message);
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.log("error in finishing sign up: ", error);
+      Alert.alert("Something went wrong, please try again");
+      setIsLoading(false);
+    }
+  };
 
   const handleOpenActionSheet = () => {
     ActionSheetIOS.showActionSheetWithOptions(
@@ -272,6 +304,7 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
               return {
                 ...prev,
                 gymName: e,
+                gymId: gyms.find((gym) => gym.attributes.name === e)?.id,
               };
             })
           }
@@ -284,17 +317,18 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
         <FormField
           title={"Gym"}
           formType={"Picker"}
-          value={formValues.gymId}
+          value={formValues.gymName}
           placeholder={"Select your gym"}
           handleChange={(e) =>
             setFromValues((prev) => {
               return {
                 ...prev,
-                gymId: e,
+                gymName: e,
+                gymId: gyms.find((gym) => gym.attributes.name === e).id,
               };
             })
           }
-          options={options}
+          options={gymOptions}
           otherStyles="mt-4"
         />
       )}
@@ -312,6 +346,12 @@ const SecoundStep = ({ formValues, setFromValues, gyms }) => {
         }
         otherStyles="mt-4"
         placeholder={"Select your birth date"}
+      />
+      <CustomButton
+        title={"Sign Up"}
+        containerStyles="mt-4"
+        handlePress={handleFinishSignUp}
+        isLoading={isLoading}
       />
     </View>
   );

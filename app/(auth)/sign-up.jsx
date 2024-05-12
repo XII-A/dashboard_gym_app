@@ -16,9 +16,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import axios from "axios";
 import FirstStep from "../../components/SignUp/FirstStep";
 import SecoundStep from "../../components/SignUp/SecoundStep";
+import { useAuth } from "../context/AuthContext";
 
 const SignUp = () => {
   const [gyms, setGyms] = useState([]);
+  const { onLogin } = useAuth();
   useEffect(() => {
     axios({
       url: `${process.env.EXPO_PUBLIC_API_URL}/gyms`,
@@ -51,9 +53,23 @@ const SignUp = () => {
     workoutGoal: null,
   });
 
-  const [currentStep, setCurrentStep] = useState(2);
+  const [currentStep, setCurrentStep] = useState(1);
   const handleInitSignUp = async () => {
+    // validate the form first
+
+    // checking if the email contains @ and .
+    if (!formValues.email.includes("@") || !formValues.email.includes(".")) {
+      Alert.alert("Please enter a valid email address");
+      return;
+    }
+    // checking if the password is less than 6 characters
+    if (formValues.password.length < 6) {
+      Alert.alert("Password must be at least 6 characters long");
+      return;
+    }
+
     // checking if the email exists or not first before taking the user to the next step
+
     try {
       await axios({
         url: `${process.env.EXPO_PUBLIC_API_URL}/users?filters[$and][0][email][$eq]=${formValues.email}`,
@@ -107,6 +123,7 @@ const SignUp = () => {
               formValues={formValues}
               setFromValues={setFromValues}
               gyms={gyms}
+              onLogin={onLogin}
             />
           )}
         </View>

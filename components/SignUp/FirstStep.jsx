@@ -4,6 +4,7 @@ import FormField from "../FormField";
 import CustomButton from "../CustomButton";
 import { Link } from "expo-router";
 const FirstStep = ({ formValues, setFromValues, handleInitSignUp }) => {
+  
   return (
     <View>
       {/* form */}
@@ -18,6 +19,7 @@ const FirstStep = ({ formValues, setFromValues, handleInitSignUp }) => {
             };
           })
         }
+        inputMode={"email"}
         otherStyles="mt-4"
         keyboardType="email-address"
       />
