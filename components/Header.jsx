@@ -6,7 +6,7 @@ const Header = ({ date, user }) => {
   return (
     <View className="flex flex-row justify-between items-center my-2">
       <View className="flex flex-col items-start gap-2">
-        <Text className="text-textColor-secondary text-lg font-manropeSemiBold text-white">
+        <Text className="text-textColor-secondary text-lg font-manropeSemiBold text-white/80">
           {date}
         </Text>
         <Text className="text-textColor-primary text-3xl font-manropeExtraBold text-white">
