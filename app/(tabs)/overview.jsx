@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, RefreshControl } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 // import { Dimensions } from "react-native";
@@ -23,6 +23,15 @@ const Overview = () => {
 
   const [caloriesLoading, setCaloriesLoading] = useState(true);
   const [calories, setCalories] = useState(null);
+
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getSteps();
+    await getWorkOuts();
+    await getCalories();
+    setRefreshing(false);
+  };
 
   const getSteps = async () => {
     const date = getDate();
@@ -138,6 +147,14 @@ const Overview = () => {
             justifyContent: "center",
             flexGrow: 1,
           }}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={["#00A8E8", "#9b71ff", "#F97316"]}
+              tintColor={"#00A8E8"}
+            />
+          }
         >
           {!stepsLoading && (
             <InfoBox
@@ -145,13 +162,14 @@ const Overview = () => {
               value={values}
               progress={steps ? steps / user.stepsGoal : 0}
               stepsGoal={user.stepsGoal}
+              otherStyles="items-center"
             />
           )}
           {!workoutLoading && (
             <InfoBox
               titles={workoutTitles}
               value={workoutsValues}
-              otherStyles="mt-2"
+              otherStyles="mt-2 items-center"
               textColor="text-[#9b71ff]"
               strokeColor="#9b71ff"
               workoutGoal={user.workoutsGoal}
