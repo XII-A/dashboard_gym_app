@@ -1,6 +1,7 @@
 import { View } from "react-native";
 import { Svg, Circle, CircleProps, SvgProps, Path } from "react-native-svg";
 import React, { useEffect } from "react";
+import { Dimensions } from "react-native";
 import Animated, {
   useAnimatedProps,
   useSharedValue,
@@ -10,13 +11,14 @@ type RingProgressProps = {
   radius?: number;
   progress: number;
   strokeWidth?: number;
+  strokeColor?: string;
 };
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 
 const RightArrow = (props: SvgProps) => (
   <Path
-    fill="#000"
+    fill="#fff"
     fillRule="evenodd"
     d="M12.293 4.293a1 1 0 0 1 1.414 0l7 7a1 1 0 0 1 0 1.414l-7 7a1 1 0 0 1-1.414-1.414L17.586 13H4a1 1 0 1 1 0-2h13.586l-5.293-5.293a1 1 0 0 1 0-1.414Z"
     clipRule="evenodd"
@@ -25,9 +27,10 @@ const RightArrow = (props: SvgProps) => (
 );
 
 const RingProgress = ({
-  radius = 100,
-  progress = 0.2,
+  radius = Dimensions.get("window").width >= 395 ? 100 : 92,
+  progress,
   strokeWidth = 34,
+  strokeColor = "#017EA7",
 }: RingProgressProps) => {
   const innerRadius = radius - strokeWidth / 2;
   const circumference = 2 * Math.PI * innerRadius;
@@ -50,7 +53,7 @@ const RingProgress = ({
     originX: radius,
     originY: radius,
     strokeWidth: strokeWidth,
-    stroke: "#017EA7",
+    stroke: strokeColor,
     strokeLinecap: "round",
     fill: "transparent",
   };

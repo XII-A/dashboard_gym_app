@@ -15,7 +15,6 @@ export default function App() {
   const checkOnboarding = async () => {
     try {
       const value = await AsyncStorage.getItem("@viewedOnboarding");
-      console.log("the value is", value);
       if (value !== null) {
         setViewedOnBoarding(true);
       }
