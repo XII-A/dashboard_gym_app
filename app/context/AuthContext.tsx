@@ -112,6 +112,16 @@ export const AuthProvider = ({ children }: any) => {
 
       await SecureStore.setItemAsync(TOKEN_KEY, res.data.jwt);
 
+      const getUser = await axios({
+        url: `${API_URL}/users/me`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      setUser(getUser.data); 
+
       return res;
     } catch (error) {
       console.log("error message", error.message);
