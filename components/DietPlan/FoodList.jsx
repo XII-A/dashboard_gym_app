@@ -5,7 +5,7 @@ import Feather from "@expo/vector-icons/Feather";
 import SectionHeader from "./SectionHeader";
 import SectionItem from "./SectionItem";
 
-const FoodList = ({ foodList }) => {
+const FoodList = ({ foodList, userID, setForceTrigger }) => {
   return (
     <SectionList
       sections={foodList}
@@ -16,6 +16,9 @@ const FoodList = ({ foodList }) => {
             foodName={item.foodName}
             calories={item.kcl.toFixed(2)}
             carbs={item.carbs.toFixed(2)}
+            userID={userID}
+            itemID={item.id}
+            setForceTrigger={setForceTrigger}
           />
         );
       }}
@@ -23,7 +26,7 @@ const FoodList = ({ foodList }) => {
         return (
           <SectionHeader
             title={title}
-            totalCalories={totalCalories.toFixed(2)}
+            totalCalories={parseFloat(totalCalories.toFixed(2))}
           />
         );
       }}
