@@ -43,6 +43,11 @@ const Overview = () => {
           "Content-Type": "application/json",
         },
       }).then((res) => {
+        if (res.data.data.length === 0) {
+          setValues([0, "0 kcal", "0 km"]);
+          setStepsLoading(false);
+          return 0;
+        }
         let stepsCount = 0;
         res.data.data.forEach((element) => {
           stepsCount += element.attributes.count;
@@ -71,6 +76,11 @@ const Overview = () => {
           "Content-Type": "application/json",
         },
       }).then((res) => {
+        if (res.data.data.length === 0) {
+          setWorkoutsValues([0, "No workouts"]);
+          setWorkoutLoading(false);
+          return [0, "No workouts"];
+        }
         let mostRecentWorkout = res.data.data[0].attributes.name;
         let workoutDuration = 0;
         res.data.data.forEach((element) => {
@@ -78,11 +88,15 @@ const Overview = () => {
         });
         // convert the duration from minutes to hours
         let hours = workoutDuration / 60;
+        // round the hours to 2 decimal places
+        hours = hours.toFixed(2);
         setWorkoutsValues([hours, mostRecentWorkout]);
         setWorkoutLoading(false);
       });
     } catch (error) {
       console.log("Error in fetching workouts:", error);
+      setWorkoutsValues([0, "No workouts"]);
+      setWorkoutLoading(false);
     }
   };
 
@@ -97,7 +111,11 @@ const Overview = () => {
         },
       }).then((res) => {
         let caloriesCount = 0;
-
+        if (res.data.data.length === 0) {
+          setCalories(0);
+          setCaloriesLoading(false);
+          return 0;
+        }
         res.data.data.forEach((element) => {
           caloriesCount += element.attributes.kcl;
         });
@@ -143,7 +161,6 @@ const Overview = () => {
         {/* scroll view */}
         <ScrollView
           contentContainerStyle={{
-            // height: "100%",
             justifyContent: "center",
             flexGrow: 1,
           }}
