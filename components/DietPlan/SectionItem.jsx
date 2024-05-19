@@ -69,7 +69,7 @@ const SectionItem = ({
   return (
     <View className="flex flex-row justify-between items-center  px-4 py-3 bg-bgColor-trinary/80 rounded">
       {/* food info */}
-      <View className="flex flex-col">
+      <View className="flex flex-col flex-1">
         <Text className="text-base font-manropeMedium text-white">
           {foodName}
         </Text>

@@ -116,10 +116,6 @@ const DietPlan = () => {
     }
   }, [selectedDay, forceTrigger]);
 
-  useEffect(() => {
-    // console.log("the foodList is", foodList);
-  }, [foodList]);
-
   return (
     <SafeAreaView className="bg-bgColor-primary flex-1">
       <Header selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
@@ -146,6 +142,9 @@ const DietPlan = () => {
             foodList={foodList}
             userID={user.id}
             setForceTrigger={setForceTrigger}
+            setTotalCalories={setTotalCalories}
+            setFoodList={setFoodList}
+            selectedDay={selectedDay}
           />
         </View>
       )}

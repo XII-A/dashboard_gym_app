@@ -120,7 +120,7 @@ export const AuthProvider = ({ children }: any) => {
         },
       });
 
-      setUser(getUser.data); 
+      setUser(getUser.data);
 
       return res;
     } catch (error) {
