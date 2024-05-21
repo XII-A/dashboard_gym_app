@@ -16,7 +16,7 @@ const days = [
 
 const Header = ({ selectedDay, setSelectedDay }) => {
   return (
-    <View className="flex flex-row items-center justify-center  px-4">
+    <View className="flex flex-row items-center justify-center mt-2 px-4">
       <View className=" w-full flex flex-row items-center justify-center ">
         <TouchableOpacity
           onPress={() => {
