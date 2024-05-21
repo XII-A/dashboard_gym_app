@@ -7,7 +7,7 @@ import {
   Alert,
 } from "react-native";
 import React, { useState } from "react";
-import FormField from "./FormField";
+import FormFieldProfile from "./FormFieldProfile";
 import CustomButton from "./CustomButton";
 import { router } from "expo-router";
 import { icons } from "./../constants";
@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import { storage } from "./../firebaseConfig";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { ref } from "firebase/storage";
+import { useAuth } from "./../app/context/AuthContext.tsx";
 import axios from "axios";
 
 const ImageViewer = ({ src }) => {
@@ -39,13 +40,31 @@ const ImageViewer = ({ src }) => {
   );
 };
 
-const ProfileData = ({
-  formValues,
-  setFromValues,
-  gyms,
-  onLogin,
-  handleInitSignUp,
-}) => {
+const ProfileData = ({}) => {
+  const { onLogin } = useAuth();
+
+  const { onLogout } = useAuth();
+
+  const { user } = useAuth();
+
+  const [gyms, setGyms] = useState([]);
+
+  const [formValues, setFormValues] = useState({
+    email: user.email,
+    // password: user.password,
+    // confirmPassword: user.confirmPassword,
+    firstName: user.name,
+    lastName: user.surname,
+    weight: user.weight,
+    height: user.height,
+    gymId: user.gymId,
+    gymName: user.gymName,
+    birthDate: user.birthday,
+    stepsGoal: user.stepsGoal,
+    caloriesGoal: user.caloriesGoal,
+    workoutGoal: user.workoutsGoal,
+  });
+
   const [selectedImage, setSelectedImage] = useState(null);
 
   const [isLoading, setIsLoading] = useState(false);
@@ -104,29 +123,12 @@ const ProfileData = ({
         formValues.email,
         setIsLoading
       );
-      setFromValues((prev) => {
+      setFormValues((prev) => {
         return {
           ...prev,
           profilePic: imageUrl,
         };
       });
-      const user = {
-        email: formValues.email,
-        password: formValues.password,
-        name: formValues.firstName,
-        surname: formValues.lastName,
-        birthday: formValues.birthDate,
-        weight: formValues.weight,
-        height: formValues.height,
-        gym: formValues.gymId,
-        profilepicUrl: imageUrl,
-        username: formValues.email,
-        stepsGoal: formValues.stepsGoal,
-        caloriesGoal: formValues.caloriesGoal,
-        workoutsGoal: formValues.workoutGoal,
-        waterGoal: 0,
-      };
-
       const jsonUser = JSON.stringify(user);
       const res = await axios({
         url: `${process.env.EXPO_PUBLIC_API_URL}/auth/local/register`,
@@ -169,7 +171,7 @@ const ProfileData = ({
         if (buttonIndex === 0) {
           // cancel action
         } else {
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               gymId: gyms[buttonIndex - 1].id,
@@ -182,7 +184,7 @@ const ProfileData = ({
   };
 
   return (
-    <View className="">
+    <View className="p-4 w-full">
       <View className="w-full flex justify-center items-center relative ">
         <View className="relative">
           <TouchableOpacity onPress={pickImage}>
@@ -198,11 +200,11 @@ const ProfileData = ({
       </View>
 
       {/* form */}
-      <FormField
+      <FormFieldProfile
         title="Email"
-        value={formValues.email}
+        value={""}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               email: e,
@@ -211,13 +213,14 @@ const ProfileData = ({
         }
         inputMode={"email"}
         otherStyles="mt-4"
+        placeholder={formValues.email}
         keyboardType="email-address"
       />
-      <FormField
+      {/* <FormFieldProfile
         title="Password"
         value={formValues.password}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               password: e,
@@ -226,11 +229,11 @@ const ProfileData = ({
         }
         otherStyles="mt-4"
       />
-      <FormField
+      <FormFieldProfile
         title="Confirm Password"
         value={formValues.confirmPassword}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               confirmPassword: e,
@@ -238,7 +241,7 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-      />
+      /> */}
 
       {/* <CustomButton
           title="Continue"
@@ -254,11 +257,11 @@ const ProfileData = ({
           isLoading={false}
         /> */}
 
-      <FormField
+      <FormFieldProfile
         title={"First Name"}
-        value={formValues.firstName}
+        value={""}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               firstName: e,
@@ -266,13 +269,13 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-        placeholder={"John"}
+        placeholder={formValues.firstName}
       />
-      <FormField
+      <FormFieldProfile
         title={"Last Name"}
-        value={formValues.lastName}
+        value={""}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               lastName: e,
@@ -280,13 +283,13 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-        placeholder={"Doe"}
+        placeholder={formValues.lastName}
       />
-      <FormField
+      <FormFieldProfile
         title={"Weight (kg)"}
         value={formValues.weight}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               weight: e,
@@ -294,14 +297,14 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-        placeholder={"70"}
+        placeholder={"formValues.weight"}
         inputMode={"numeric"}
       />
-      <FormField
+      <FormFieldProfile
         title={"Height (cm)"}
         value={formValues.height}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               height: e,
@@ -312,11 +315,11 @@ const ProfileData = ({
         placeholder={"170"}
         inputMode={"numeric"}
       />
-      <FormField
+      <FormFieldProfile
         title={"Steps Goal"}
-        value={formValues.stepsGoal}
+        value={""}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               stepsGoal: e,
@@ -324,14 +327,14 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-        placeholder={"10000"}
+        placeholder={formValues.stepsGoal}
         inputMode={"numeric"}
       />
-      <FormField
+      <FormFieldProfile
         title={"Calories Goal"}
-        value={formValues.caloriesGoal}
+        value={""}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               caloriesGoal: e,
@@ -339,14 +342,14 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-        placeholder={"2000"}
+        placeholder={formValues.caloriesGoal}
         inputMode={"numeric"}
       />
-      <FormField
+      <FormFieldProfile
         title={"Workout Goal"}
-        value={formValues.workoutGoal}
+        value={""}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               workoutGoal: e,
@@ -354,17 +357,17 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-        placeholder={"4 hours"}
+        placeholder={formValues.workoutGoal}
         inputMode={"numeric"}
       />
       {/* gym picker */}
       {Platform.OS === "ios" && (
-        <FormField
+        <FormFieldProfile
           title={"Gym"}
           formType={"Picker"}
           value={formValues.gymName}
           handleChange={(e) =>
-            setFromValues((prev) => {
+            setFormValues((prev) => {
               return {
                 ...prev,
                 gymName: e,
@@ -378,13 +381,13 @@ const ProfileData = ({
         />
       )}
       {Platform.OS === "android" && (
-        <FormField
+        <FormFieldProfile
           title={"Gym"}
           formType={"Picker"}
           value={formValues.gymName}
           placeholder={"Select your gym"}
           handleChange={(e) =>
-            setFromValues((prev) => {
+            setFormValues((prev) => {
               return {
                 ...prev,
                 gymName: e,
@@ -396,12 +399,12 @@ const ProfileData = ({
           otherStyles="mt-4"
         />
       )}
-      <FormField
+      <FormFieldProfile
         title={"Date of Birth"}
         formType={"DatePicker"}
-        value={formValues.birthDate}
+        value={""}
         handleChange={(e) =>
-          setFromValues((prev) => {
+          setFormValues((prev) => {
             return {
               ...prev,
               birthDate: e,
@@ -409,14 +412,24 @@ const ProfileData = ({
           })
         }
         otherStyles="mt-4"
-        placeholder={"Select your birth date"}
+        placeholder={formValues.birthDate}
       />
-      <CustomButton
-        title={"Sign Up"}
-        containerStyles="mt-4"
-        handlePress={handleFinishSignUp}
-        isLoading={isLoading}
-      />
+
+      <View className="flex flex-row justify-center">
+        <CustomButton
+          title={"Confirm"}
+          containerStyles="p-4 m-4"
+          handlePress={handleFinishSignUp}
+          isLoading={isLoading}
+        />
+
+        <CustomButton
+          title={"Log Out"}
+          containerStyles="p-4 m-4"
+          handlePress={onLogout}
+          isLoading={isLoading}
+        />
+      </View>
     </View>
   );
 };
