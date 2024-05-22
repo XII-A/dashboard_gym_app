@@ -35,10 +35,10 @@ import {
                 {title}
               </Text>
               <TouchableOpacity className="flex flex-row" onPress={() => setShowDatePicker(true)}>
-                <View className="flex flex-row text-white/90 focus:border-blue-default">
+                <View className="flex flex-row text-blue-text focus:border-blue-default">
                   <Text
                     className={` ${
-                      value ? "text-white/90" : "text-blue-text"
+                      value ? "text-blue-text" : "text-blue-text"
                     } font-manropeSemiBold text-base`}
                   >
                     {value ? value : placeholder}
@@ -127,7 +127,7 @@ import {
             </Text>
             {Platform.OS === "android" && (
               <TouchableOpacity onPress={() => pickerRef.current?.focus?.()}>
-                <View className="flex flex-row text-white/90 focus:border-blue-default">
+                <View className="flex flex-row text-blue-text focus:border-blue-default">
                   <Picker
                     ref={pickerRef}
                     selectedValue={value}
@@ -165,10 +165,10 @@ import {
             {Platform.OS === "ios" && (
               <>
                 <TouchableOpacity onPress={() => setShowPicker(true)}>
-                  <View className=" text-white/90 focus:border-blue-default">
+                  <View className=" text-blue-text focus:border-blue-default">
                     <Text
                       className={` ${
-                        value ? "text-white/90" : "text-blue-text"
+                        value ? "text-blue-text" : "text-blue-text"
                       } font-manropeSemiBold text-base`}
                     >
                       {value ? value : placeholder}
@@ -186,7 +186,7 @@ import {
                       <TouchableOpacity onPress={() => setShowPicker(false)}>
                         <Feather name="x" size={24} color="white" />
                       </TouchableOpacity>
-                      <Text className="text-white/90 font-manropeSemiBold text-base">
+                      <Text className="text-blue-text font-manropeSemiBold text-base">
                         {title}
                       </Text>
                       <TouchableOpacity
@@ -226,10 +226,10 @@ import {
               {title}
             </Text>
             <TouchableOpacity onPress={rest.onPress}>
-              <View className="flex flex-row text-white/90 focus:border-blue-default">
+              <View className="flex flex-row text-blue-text focus:border-blue-default">
                 <Text
                   className={` ${
-                    value ? "text-white/90" : "text-blue-text"
+                    value ? "text-blue-text" : "text-blue-text"
                   } font-manropeSemiBold text-base`}
                 >
                   {value ? value : placeholder}
@@ -245,9 +245,9 @@ import {
             <Text className="text-base text-white font-manropeMedium">
               {title}
             </Text>
-            <View className="flex flex-row text-white/90 focus:border-blue-default">
+            <View className="flex flex-row text-blue-text focus:border-blue-default">
               <TextInput
-                className=" text-white/90 font-manropeSemiBold text-base"
+                className=" text-blue-text font-manropeSemiBold text-base"
                 value={value}
                 placeholder={placeholder}
                 placeholderTextColor={"#00a8e8"}
@@ -259,7 +259,7 @@ import {
               />
               {title === "Password" && (
                 <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-                  <Text className="text-white/90 font-manropeSemiBold text-base">
+                  <Text className="text-blue-text font-manropeSemiBold text-base">
                     {showPassword ? (
                       <Feather name="eye-off" size={24} color="white" />
                     ) : (

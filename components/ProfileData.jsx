@@ -55,8 +55,8 @@ const ProfileData = ({}) => {
     // confirmPassword: user.confirmPassword,
     firstName: user.name,
     lastName: user.surname,
-    weight: user.weight,
-    height: user.height,
+    weight: user.weight + "",
+    height: user.height + "",
     gymId: user.gymId,
     gymName: user.gymName,
     birthDate: user.birthday,
@@ -115,7 +115,7 @@ const ProfileData = ({}) => {
     }
   };
 
-  const handleFinishSignUp = async () => {
+  const handleConfirm = async () => {
     setIsLoading(true);
     try {
       const imageUrl = await uploadImage(
@@ -140,47 +140,22 @@ const ProfileData = ({}) => {
       })
         .then((res) => {
           // log in the user after signing up then redirect to the overview page
-          onLogin(formValues.email, formValues.password);
-          router.replace("/overview");
+
           setIsLoading(false);
         })
         .catch((err) => {
           console.log(
-            "error in finishing sign up .catch: ",
+            "error in confirming .catch: ",
             err.response.data.error.message
           );
           Alert.alert(err.response.data.error.message);
           setIsLoading(false);
         });
     } catch (error) {
-      console.log("error in finishing sign up: ", error);
+      console.log("error in confirming: ", error);
       Alert.alert("Something went wrong, please try again");
       setIsLoading(false);
     }
-  };
-
-  const handleOpenActionSheet = () => {
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ["Cancel", ...gymOptions],
-        cancelButtonIndex: 0,
-        userInterfaceStyle: "dark",
-        title: "Select your gym",
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 0) {
-          // cancel action
-        } else {
-          setFormValues((prev) => {
-            return {
-              ...prev,
-              gymId: gyms[buttonIndex - 1].id,
-              gymName: gyms[buttonIndex - 1].attributes.name,
-            };
-          });
-        }
-      }
-    );
   };
 
   return (
@@ -202,7 +177,7 @@ const ProfileData = ({}) => {
       {/* form */}
       <FormFieldProfile
         title="Email"
-        value={""}
+        value={formValues.email}
         handleChange={(e) =>
           setFormValues((prev) => {
             return {
@@ -213,53 +188,13 @@ const ProfileData = ({}) => {
         }
         inputMode={"email"}
         otherStyles="mt-4"
-        placeholder={formValues.email}
+        placeholder={user.email}
         keyboardType="email-address"
       />
-      {/* <FormFieldProfile
-        title="Password"
-        value={formValues.password}
-        handleChange={(e) =>
-          setFormValues((prev) => {
-            return {
-              ...prev,
-              password: e,
-            };
-          })
-        }
-        otherStyles="mt-4"
-      />
-      <FormFieldProfile
-        title="Confirm Password"
-        value={formValues.confirmPassword}
-        handleChange={(e) =>
-          setFormValues((prev) => {
-            return {
-              ...prev,
-              confirmPassword: e,
-            };
-          })
-        }
-        otherStyles="mt-4"
-      /> */}
-
-      {/* <CustomButton
-          title="Continue"
-          handlePress={handleInitSignUp}
-          containerStyles="mt-6"
-          textStyles={""}
-          isDisabled={
-            !formValues.email ||
-            !formValues.password ||
-            !formValues.confirmPassword ||
-            !(formValues.password === formValues.confirmPassword)
-          }
-          isLoading={false}
-        /> */}
 
       <FormFieldProfile
         title={"First Name"}
-        value={""}
+        value={formValues.firstName}
         handleChange={(e) =>
           setFormValues((prev) => {
             return {
@@ -269,11 +204,11 @@ const ProfileData = ({}) => {
           })
         }
         otherStyles="mt-4"
-        placeholder={formValues.firstName}
+        placeholder={user.firstName}
       />
       <FormFieldProfile
         title={"Last Name"}
-        value={""}
+        value={formValues.lastName}
         handleChange={(e) =>
           setFormValues((prev) => {
             return {
@@ -317,7 +252,7 @@ const ProfileData = ({}) => {
       />
       <FormFieldProfile
         title={"Steps Goal"}
-        value={""}
+        value={formValues.stepsGoal}
         handleChange={(e) =>
           setFormValues((prev) => {
             return {
@@ -332,7 +267,7 @@ const ProfileData = ({}) => {
       />
       <FormFieldProfile
         title={"Calories Goal"}
-        value={""}
+        value={formValues.caloriesGoal}
         handleChange={(e) =>
           setFormValues((prev) => {
             return {
@@ -347,7 +282,7 @@ const ProfileData = ({}) => {
       />
       <FormFieldProfile
         title={"Workout Goal"}
-        value={""}
+        value={formValues.workoutGoal}
         handleChange={(e) =>
           setFormValues((prev) => {
             return {
@@ -360,49 +295,11 @@ const ProfileData = ({}) => {
         placeholder={formValues.workoutGoal}
         inputMode={"numeric"}
       />
-      {/* gym picker */}
-      {Platform.OS === "ios" && (
-        <FormFieldProfile
-          title={"Gym"}
-          formType={"Picker"}
-          value={formValues.gymName}
-          handleChange={(e) =>
-            setFormValues((prev) => {
-              return {
-                ...prev,
-                gymName: e,
-                gymId: gyms.find((gym) => gym.attributes.name === e)?.id,
-              };
-            })
-          }
-          otherStyles="mt-4"
-          placeholder={"Select your gym"}
-          options={gymOptions}
-        />
-      )}
-      {Platform.OS === "android" && (
-        <FormFieldProfile
-          title={"Gym"}
-          formType={"Picker"}
-          value={formValues.gymName}
-          placeholder={"Select your gym"}
-          handleChange={(e) =>
-            setFormValues((prev) => {
-              return {
-                ...prev,
-                gymName: e,
-                gymId: gyms.find((gym) => gym.attributes.name === e).id,
-              };
-            })
-          }
-          options={gymOptions}
-          otherStyles="mt-4"
-        />
-      )}
+
       <FormFieldProfile
         title={"Date of Birth"}
         formType={"DatePicker"}
-        value={""}
+        value={formValues.birthDate}
         handleChange={(e) =>
           setFormValues((prev) => {
             return {
@@ -419,7 +316,7 @@ const ProfileData = ({}) => {
         <CustomButton
           title={"Confirm"}
           containerStyles="p-4 m-4"
-          handlePress={handleFinishSignUp}
+          handlePress={handleConfirm}
           isLoading={isLoading}
         />
 
