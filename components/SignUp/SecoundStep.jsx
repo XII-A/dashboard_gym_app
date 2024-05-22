@@ -17,27 +17,7 @@ import { storage } from "../../firebaseConfig";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { ref } from "firebase/storage";
 import axios from "axios";
-
-const ImageViewer = ({ src }) => {
-  return (
-    <View className="flex justify-center items-center bg-white/5 border border-white/10 rounded-full w-36 h-36">
-      {src == null ? (
-        <Image
-          source={icons.person}
-          resizeMode="contain"
-          className="w-20 h-20"
-          tintColor={"#64748bd9"}
-        />
-      ) : (
-        <Image
-          source={{ uri: src }}
-          resizeMode="cover"
-          className="w-36 h-36 rounded-full"
-        />
-      )}
-    </View>
-  );
-};
+import ImageViewer from "../shared/ImageViewer";
 
 const SecoundStep = ({ formValues, setFromValues, gyms, onLogin }) => {
   const [selectedImage, setSelectedImage] = useState(null);
@@ -180,7 +160,7 @@ const SecoundStep = ({ formValues, setFromValues, gyms, onLogin }) => {
       <View className="w-full flex justify-center items-center relative ">
         <View className="relative">
           <TouchableOpacity onPress={pickImage}>
-            <ImageViewer src={selectedImage} />
+            <ImageViewer src={selectedImage} icon={icons.person} />
             {/* plus image in case there is no selected image */}
             {!selectedImage && (
               <View className="absolute right-5 bottom-2">

@@ -4,6 +4,7 @@ import notepad from "../assets/icons/notepad.png";
 import overview from "../assets/icons/overview.png";
 import logo from "../assets/icons/fitness.png";
 import person from "../assets/icons/person.png";
+import imageFill from "../assets/icons/imageFill.png";
 export default {
   bars,
   calendar,
@@ -11,4 +12,5 @@ export default {
   overview,
   logo,
   person,
+  imageFill,
 };
