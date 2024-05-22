@@ -14,7 +14,7 @@ const days = [
   "Saturday",
 ];
 
-const Header = ({ selectedDay, setSelectedDay }) => {
+const SelectDay = ({ selectedDay, setSelectedDay }) => {
   return (
     <View className="flex flex-row items-center justify-center mt-2 px-4">
       <View className=" w-full flex flex-row items-center justify-center ">
@@ -55,4 +55,4 @@ const Header = ({ selectedDay, setSelectedDay }) => {
   );
 };
 
-export default Header;
+export default SelectDay;

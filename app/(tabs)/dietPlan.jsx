@@ -1,18 +1,11 @@
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, ActivityIndicator } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Header from "../../components/DietPlan/Header";
-import AntDesign from "@expo/vector-icons/AntDesign";
-import Feather from "@expo/vector-icons/Feather";
-import FoodList from "../../components/DietPlan/FoodList";
 import axios from "axios";
+
+import FoodList from "../../components/DietPlan/FoodList";
 import { useAuth } from "../context/AuthContext";
+import SelectDay from "../../components/shared/SelectDay";
 
 const days = [
   "Sunday",
@@ -118,7 +111,7 @@ const DietPlan = () => {
 
   return (
     <SafeAreaView className="bg-bgColor-primary flex-1">
-      <Header selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
+      <SelectDay selectedDay={selectedDay} setSelectedDay={setSelectedDay} />
       {
         // show the loader if the data is loading
         dataLoading && (
