@@ -66,7 +66,6 @@ const Routine = ({ key, userID }) => {
               >
                 <TouchableOpacity
                   onPress={() => {
-                    console.log("Add Workout");
                     router.push("/addWorkout");
                   }}
                 >
