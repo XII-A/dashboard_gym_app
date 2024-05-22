@@ -3,6 +3,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PagerView from "react-native-pager-view";
 import TabsViewer from "../../components/Schedule/Tabs";
+import Routine from "../../components/Schedule/Routine";
+import Courses from "../../components/Schedule/Courses";
 
 const MySchedule = () => {
   const [index, setIndex] = useState(0);
@@ -34,12 +36,8 @@ const MySchedule = () => {
           setOpacity(e.nativeEvent.offset);
         }}
       >
-        <View key="1" style={{ flex: 1 }}>
-          <Text>First page</Text>
-        </View>
-        <View key="2" style={{ flex: 1 }}>
-          <Text>Second page</Text>
-        </View>
+        <Routine key="1" />
+        <Courses key="2" />
       </PagerView>
     </SafeAreaView>
   );
