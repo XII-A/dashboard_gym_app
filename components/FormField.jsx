@@ -352,6 +352,7 @@ const FormField = ({
               keyboardType={keyboardType}
               autoCapitalize="none"
               inputMode={inputMode ? inputMode : "text"}
+              {...rest}
             />
             {title === "Password" && (
               <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>

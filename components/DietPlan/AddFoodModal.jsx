@@ -12,6 +12,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
 import { Entypo } from "@expo/vector-icons";
 import axios from "axios";
+import SearchBarField from "../shared/SearchBarField";
 
 const AddFoodModal = ({
   showAddFood,
@@ -166,59 +167,14 @@ const AddFoodModal = ({
     >
       <View className="h-full bg-bgColor-primary">
         {/* search bar */}
-        <View className="flex flex-row items-center px-4 mt-4">
-          <View className="group flex flex-1 flex-row items-center bg-white/5 text-white/90 shadow-sm border border-white/10 h-11 rounded-md focus:border-blue-default pl-4 ">
-            <TextInput
-              className="text-white/90 font-manropeSemiBold text-base flex-1 "
-              value={value}
-              placeholder={"Search Food"}
-              placeholderTextColor={"#64748bd9"}
-              onChangeText={(text) => {
-                setValue(text);
-              }}
-              keyboardType={"default"}
-              autoCapitalize="none"
-              inputMode={"text"}
-              returnKeyType={"search"}
-              onSubmitEditing={() => {
-                handleSearch();
-                setValue("");
-                inputRef.current.blur();
-              }}
-              ref={inputRef}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                setValue("");
-              }}
-              className={`${
-                value.length > 0 ? "opacity-100" : "opacity-0"
-              } transition-all duration-300 ease-in-out`}
-            >
-              <Feather name="x" size={20} color="#64748bd9" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                handleSearch();
-                setValue("");
-                inputRef.current.blur();
-              }}
-              disabled={value.length === 0}
-              className={`h-11 px-4 ml-2  items-center justify-center  transition-colors  duration-300 ease-in-out rounded-r-md
-                  ${value.length > 0 ? "bg-blue-default" : "bg-transparent"}
-                `}
-            >
-              {!loading && (
-                <AntDesign
-                  name="search1"
-                  size={20}
-                  color={value.length > 0 ? "#fff" : "#64748bd9"}
-                />
-              )}
-              {loading && <ActivityIndicator size="small" color="#fff" />}
-            </TouchableOpacity>
-          </View>
-        </View>
+        <SearchBarField
+          value={value}
+          setValue={setValue}
+          handleSearch={handleSearch}
+          loading={loading}
+          placeholder="Search for food"
+        />
+
         {/* search results */}
         {!loading && searchResults.length > 0 && (
           <View className="flex-1 my-4 px-4">

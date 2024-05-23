@@ -98,7 +98,10 @@ const ListItem = ({ item, userID, setFilteredSchedule }) => {
       </View>
       <View className="flex flex-row items-center justify-end flex-1 ">
         <Text className="mr-2 text-sm font-manropeSemiBold text-blue-text">
-          {item.attributes.caloriesPerHour * (item.attributes.duration / 60)}{" "}
+          {(
+            item.attributes.caloriesPerHour *
+            (item.attributes.duration / 60)
+          ).toFixed(2)}{" "}
           kcal
         </Text>
         <TouchableOpacity

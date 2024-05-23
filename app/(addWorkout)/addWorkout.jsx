@@ -5,15 +5,17 @@ import { storage } from "../../firebaseConfig";
 import { getDownloadURL, uploadBytes } from "firebase/storage";
 import { ref } from "firebase/storage";
 import AntDesign from "@expo/vector-icons/AntDesign";
+import axios from "axios";
+import { useRouter } from "expo-router";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import { icons } from "../../constants";
 import ImageViewer from "../../components/shared/ImageViewer";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import FormField from "../../components/FormField";
 import CustomButton from "../../components/CustomButton";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
-import { useRouter } from "expo-router";
+import SearchBarField from "../../components/shared/SearchBarField";
+import WorkOutModal from "../../components/Schedule/WorkOutModal";
 
 const days = [
   "Monday",
@@ -27,18 +29,18 @@ const days = [
 
 const addWorkout = () => {
   const [formValues, setFormValues] = useState({
-    workoutName: "",
-    duration: "",
-    caloriesPerHour: "",
-    time: "",
-    day: "",
-    member: "",
-    workoutImageUrl: "",
+    workoutName: null,
+    duration: null,
+    caloriesPerHour: null,
+    time: null,
+    day: null,
+    member: null,
+    workoutImageUrl: null,
   });
 
-  useEffect(() => {
-    // console.log("formValues", formValues);
-  }, [formValues]);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchLoading, setSearchLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const { user, setUpdateSchedule } = useAuth();
   const router = useRouter();
@@ -146,118 +148,153 @@ const addWorkout = () => {
         return true;
       });
     } catch (error) {
-      console.log("error", error);
+      console.log("error in adding workout:", error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <View className="bg-bgColor-primary flex flex-col flex-1 px-4 justify-center pb-12">
-      <KeyboardAwareScrollView extraScrollHeight={100} className="flex flex-1">
-        <View className="w-full flex justify-center items-center relative mt-2">
-          <Text className="text-base text-white font-manropeMedium mb-2">
-            Workout Image*
-          </Text>
-          <View className="relative">
-            <TouchableOpacity onPress={pickImage}>
-              <ImageViewer src={selectedImage} icon={icons.imageFill} />
-              {/* plus image in case there is no selected image */}
-              {!selectedImage && (
-                <View className="absolute right-5 bottom-2">
-                  <AntDesign name="pluscircle" size={24} color="#00A8E8" />
-                </View>
-              )}
-            </TouchableOpacity>
+    <>
+      <View className="bg-bgColor-primary flex flex-col flex-1 px-4 justify-center ">
+        <KeyboardAwareScrollView
+          extraScrollHeight={100}
+          className="flex flex-1 "
+        >
+          <View className="w-full flex justify-center items-center relative mt-2">
+            <Text className="text-base text-white font-manropeMedium mb-2">
+              Workout Image*
+            </Text>
+            <View className="relative">
+              <TouchableOpacity onPress={pickImage}>
+                <ImageViewer src={selectedImage} icon={icons.imageFill} />
+                {/* plus image in case there is no selected image */}
+                {!selectedImage && (
+                  <View className="absolute right-5 bottom-2">
+                    <AntDesign name="pluscircle" size={24} color="#00A8E8" />
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-        <FormField
-          title={"Workout Name*"}
-          value={formValues.workoutName}
-          handleChange={(e) =>
-            setFormValues((prev) => {
-              return {
-                ...prev,
-                workoutName: e,
-              };
-            })
-          }
-          otherStyles="mt-4"
-          placeholder={"Cardio"}
-        />
-        <FormField
-          title={"Duration (minutes)*"}
-          value={formValues.duration}
-          handleChange={(e) =>
-            setFormValues((prev) => {
-              return {
-                ...prev,
-                duration: e,
-              };
-            })
-          }
-          otherStyles="mt-4"
-          placeholder={"30"}
-          inputMode={"numeric"}
-        />
-        <FormField
-          title={"Calories per Hour*"}
-          value={formValues.caloriesPerHour}
-          handleChange={(e) =>
-            setFormValues((prev) => {
-              return {
-                ...prev,
-                caloriesPerHour: e,
-              };
-            })
-          }
-          otherStyles="mt-4"
-          placeholder={"300"}
-          inputMode={"numeric"}
-        />
-        <FormField
-          title={"Starts at*"}
-          formType={"TimePicker"}
-          placeholder={"Select time"}
-          value={formValues.time}
-          handleChange={(e) =>
-            setFormValues((prev) => {
-              return {
-                ...prev,
-                time: e,
-              };
-            })
-          }
-          otherStyles="mt-4"
-        />
+          <FormField
+            title={"Workout Name*"}
+            value={formValues.workoutName}
+            handleChange={(e) => {
+              setFormValues((prev) => {
+                return {
+                  ...prev,
+                  workoutName: e,
+                };
+              });
+            }}
+            otherStyles="mt-4"
+            placeholder={"Cardio"}
+          />
+          <FormField
+            title={"Duration (minutes)*"}
+            value={formValues.duration}
+            handleChange={(e) => {
+              setFormValues((prev) => {
+                return {
+                  ...prev,
+                  duration: e,
+                };
+              });
+            }}
+            otherStyles="mt-4"
+            placeholder={"30"}
+            inputMode={"numeric"}
+          />
+          <FormField
+            title={"Calories per Hour*"}
+            value={formValues.caloriesPerHour}
+            handleChange={(e) => {
+              setFormValues((prev) => {
+                return {
+                  ...prev,
+                  caloriesPerHour: e,
+                };
+              });
+            }}
+            otherStyles="mt-4"
+            placeholder={"300"}
+            inputMode={"numeric"}
+          />
+          <FormField
+            title={"Starts at*"}
+            formType={"TimePicker"}
+            placeholder={"Select time"}
+            value={formValues.time}
+            handleChange={(e) =>
+              setFormValues((prev) => {
+                return {
+                  ...prev,
+                  time: e,
+                };
+              })
+            }
+            otherStyles="mt-4"
+          />
 
-        <FormField
-          title={"Day*"}
-          formType={"Picker"}
-          value={formValues.day}
-          placeholder={"Select day"}
-          handleChange={(e) =>
-            setFormValues((prev) => {
-              return {
-                ...prev,
-                day: e,
-              };
-            })
-          }
-          options={days}
-          otherStyles="mt-4"
-        />
-        <CustomButton
-          title={"Add Workout"}
-          handlePress={async () => {
-            await handleAddWorkout();
-          }}
-          containerStyles="mt-4"
-          isLoading={loading}
-          isDisabled={loading}
-        />
-      </KeyboardAwareScrollView>
-    </View>
+          <FormField
+            title={"Day*"}
+            formType={"Picker"}
+            value={formValues.day}
+            placeholder={"Select day"}
+            handleChange={(e) =>
+              setFormValues((prev) => {
+                return {
+                  ...prev,
+                  day: e,
+                };
+              })
+            }
+            options={days}
+            otherStyles="mt-4"
+          />
+          <CustomButton
+            title={"Add Workout"}
+            handlePress={async () => {
+              await handleAddWorkout();
+            }}
+            containerStyles="mt-4"
+            isLoading={loading}
+            isDisabled={loading}
+          />
+          <View className="h-28" />
+        </KeyboardAwareScrollView>
+        <View className="absolute bottom-0 right-0 left-0 bg-bgColor-secondary pb-6">
+          <TouchableOpacity
+            onPress={() => {
+              setShowModal(true);
+            }}
+          >
+            <SearchBarField
+              value={searchValue}
+              setValue={setSearchValue}
+              handleSearch={() => {
+                // dummy function
+                console.log("searching for", searchValue);
+              }}
+              loading={searchLoading}
+              placeholder="Search for a workout"
+              disabled={true}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <WorkOutModal
+        setShowModal={setShowModal}
+        showModal={showModal}
+        value={searchValue}
+        setValue={setSearchValue}
+        loading={searchLoading}
+        setLoading={setSearchLoading}
+        setFormValues={setFormValues}
+        setSelectedImage={setSelectedImage}
+      />
+    </>
   );
 };
 
