@@ -15,7 +15,7 @@ const AddWorkOutLayout = () => {
             headerShown: true,
             title: "Add Workout",
             headerStyle: {
-              backgroundColor: "#0D1013",
+              backgroundColor: "#017EA7",
             },
             headerTintColor: "#fff",
             headerTitleStyle: {
@@ -29,7 +29,7 @@ const AddWorkOutLayout = () => {
                     router.back();
                   }}
                 >
-                  <View className="flex justify-center">
+                  <View className="flex justify-center mr-2">
                     <AntDesign name="left" size={20} color="white" />
                   </View>
                 </TouchableOpacity>

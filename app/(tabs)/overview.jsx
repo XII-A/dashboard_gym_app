@@ -8,6 +8,7 @@ import Header from "../../components/Header";
 import InfoBox from "../../components/InfoBox";
 import { getDate } from "../../utils/timeUtils";
 import { useAuth } from "../context/AuthContext";
+import { Redirect } from "expo-router";
 
 const Overview = () => {
   const { user } = useAuth();
@@ -156,6 +157,8 @@ const Overview = () => {
 
   return (
     <SafeAreaView className="bg-bgColor-primary flex-1">
+      {/* !!! WAS ADDED FOR TESTING REMOVE BEFORE PUSHING THE CODE */}
+      {/* <Redirect href="/(addWorkout)/addWorkout" /> */}
       <View className="h-full bg-bgColor-primary px-4">
         <Header date={date} user={user} />
         {/* scroll view */}

@@ -30,6 +30,8 @@ interface AuthProps {
   onRegister?: (email: string, password: string) => Promise<void>;
   onLogin?: (email: string, password: string) => Promise<void>;
   onLogout?: () => Promise<void>;
+  updateSchedule?: boolean;
+  setUpdateSchedule?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TOKEN_KEY = "my-jwt";
@@ -51,6 +53,7 @@ export const AuthProvider = ({ children }: any) => {
   });
   const [authLoading, setAuthLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [updateSchedule, setUpdateSchedule] = useState(false);
   //   useEffect(() => {
   //     console.log("the auth state in context: ", authState);
   //   }, [authState]);
@@ -150,6 +153,8 @@ export const AuthProvider = ({ children }: any) => {
     authState,
     authLoading,
     user,
+    updateSchedule,
+    setUpdateSchedule,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import PagerView from "react-native-pager-view";
@@ -14,7 +14,7 @@ const MySchedule = () => {
     { key: "second", title: "Courses" },
   ]);
 
-  const { user } = useAuth();
+  const { user, updateSchedule } = useAuth();
 
   const [opacity, setOpacity] = useState(0);
 
@@ -39,7 +39,7 @@ const MySchedule = () => {
           setOpacity(e.nativeEvent.offset);
         }}
       >
-        <Routine key="1" userID={user.id} />
+        <Routine key="1" userID={user.id} updateSchedule={updateSchedule} />
         <Courses key="2" />
       </PagerView>
     </SafeAreaView>

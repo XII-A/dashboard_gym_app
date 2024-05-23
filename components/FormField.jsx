@@ -117,9 +117,101 @@ const FormField = ({
         </View>
       );
 
+    case "TimePicker":
+      const [showTimePicker, setShowTimePicker] = useState(false);
+      const [time, setTime] = useState(new Date());
+      return (
+        <View>
+          <View className={`space-y-2 ${otherStyles}`}>
+            <Text className="text-base text-white font-manropeMedium">
+              {title}
+            </Text>
+            <TouchableOpacity onPress={() => setShowTimePicker(true)}>
+              <View className="flex flex-row bg-white/5 text-white/90 shadow-sm border border-white/10 h-16 rounded-lg focus:border-blue-default items-center px-4">
+                <Text
+                  className={`flex-1 ${
+                    value ? "text-white/90" : "text-[#64748bd9]"
+                  } font-manropeSemiBold text-base`}
+                >
+                  {value ? value : placeholder}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          </View>
+          {showTimePicker && Platform.OS === "ios" && (
+            <Modal
+              animationType="slide"
+              visible={showTimePicker}
+              onRequestClose={() => setShowTimePicker(false)}
+              transparent={true}
+            >
+              <View className="absolute bottom-0 w-full h-1/4 bg-bgColor-primary flex">
+                <View className="flex flex-row justify-between items-end border-b border-b-white/5 px-4 py-2">
+                  <TouchableOpacity onPress={() => setShowTimePicker(false)}>
+                    <Feather name="x" size={24} color="white" />
+                  </TouchableOpacity>
+                  <Text className="text-white/90 font-manropeSemiBold text-base">
+                    {title}
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setShowTimePicker(false);
+                      handleChange(
+                        time.toLocaleTimeString("en-GB", {
+                          hour12: false,
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      );
+                    }}
+                  >
+                    {/* check */}
+                    <Feather name="check" size={24} color="white" />
+                  </TouchableOpacity>
+                </View>
+                <DateTimePicker
+                  is24Hour={true}
+                  value={time}
+                  mode="time"
+                  display="spinner"
+                  onChange={(event, selectedTime) => {
+                    const currentTime = selectedTime;
+                    setTime(currentTime);
+                  }}
+                />
+              </View>
+            </Modal>
+          )}
+          {showTimePicker && Platform.OS === "android" && (
+            <DateTimePicker
+              value={time}
+              mode="time"
+              display="spinner"
+              is24Hour={true}
+              onChange={(event, selectedTime) => {
+                if (event.type === "set") {
+                  const currentTime = selectedTime;
+                  setShowTimePicker(false);
+                  setTime(currentTime);
+                  handleChange(
+                    currentTime.toLocaleTimeString("en-GB", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })
+                  );
+                } else {
+                  setShowTimePicker(false);
+                }
+              }}
+            />
+          )}
+        </View>
+      );
+
     case "Picker":
       const pickerRef = useRef(null);
       const [showPicker, setShowPicker] = useState(false);
+
       return (
         <View className={`space-y-2 ${otherStyles}`}>
           <Text className="text-base text-white font-manropeMedium">
@@ -192,7 +284,11 @@ const FormField = ({
                     <TouchableOpacity
                       onPress={() => {
                         setShowPicker(false);
-                        handleChange(value);
+                        if (value) {
+                          handleChange(value);
+                        } else {
+                          handleChange(rest.options[0]);
+                        }
                       }}
                     >
                       {/* check */}
