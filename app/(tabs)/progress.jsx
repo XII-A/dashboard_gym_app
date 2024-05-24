@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import axios from "axios";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -8,6 +8,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useAuth } from "../context/AuthContext";
 import BarChartBox from "../../components/Charts/BarChartBox";
 import { getDayFromDate, getWeek } from "../../utils/timeUtils";
+import WeekSelector from "../../components/shared/WeekSelector";
 
 const daysOfWeek = [
   "Sunday",
@@ -19,7 +20,7 @@ const daysOfWeek = [
   "Saturday",
 ];
 const Progress = () => {
-  const barData = [{ value: 15 }, { value: 30 }, { value: 26 }, { value: 40 }];
+  const [selectedRange, setSelectedRange] = useState(getWeek());
 
   const { user } = useAuth();
 
@@ -35,9 +36,13 @@ const Progress = () => {
   const [weeklyBurnedCalories, setWeeklyBurnedCalories] = useState([]);
   const [loadingBurnedCalories, setLoadingBurnedCalories] = useState(true);
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useEffect(() => {
-    const [firstDay, lastDay] = getWeek();
+    if (selectedRange.length === 0) return;
+    const [firstDay, lastDay] = selectedRange;
     // get the weekly calories
+    setRefreshing(true);
     try {
       axios({
         method: "GET",
@@ -161,22 +166,34 @@ const Progress = () => {
 
         setWeeklyBurnedCalories(data);
         setLoadingBurnedCalories(false);
+        setRefreshing(false);
       });
     } catch (e) {
       console.log("error in getting data for progress: ", e);
+    } finally {
+      // set all the loading states to false
+      setLoadingCalories(false);
+      setLoadingWorkouts(false);
+      setLoadingSteps(false);
+      setLoadingBurnedCalories(false);
+      setRefreshing(false);
     }
-  }, []);
-  // TODO: have some sort of thing that allows you to go back in weeks
+  }, [selectedRange]);
 
   return (
     <SafeAreaView className="bg-bgColor-primary flex-1">
-      <View className="h-full bg-bgColor-primary px-4">
+      <View className="h-full bg-bgColor-primary px-4 max-[395px]:px-2">
         <ScrollView
           className="h-full"
           contentContainerStyle={{
             flexGrow: 1,
           }}
         >
+          <WeekSelector
+            selectedRange={selectedRange}
+            setSelectedRange={setSelectedRange}
+          />
+
           <View className="my-2">
             <BarChartBox
               weeklyData={weeklyCalories}

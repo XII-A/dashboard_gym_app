@@ -12,7 +12,9 @@ const BarChartBox = ({
   children,
 }) => {
   return (
-    <View className={`${backgroundColor} rounded p-4 flex flex-col`}>
+    <View
+      className={`${backgroundColor} rounded p-4 flex flex-col max-[395px]:p-2`}
+    >
       <View className="flex flex-row items-center mb-4">
         <View className={`${iconBackgroundColor} p-2 rounded-md mr-2`}>
           {children}
