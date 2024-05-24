@@ -23,6 +23,7 @@ const FoodList = ({
   setTotalCalories,
   setFoodList,
   selectedDay,
+  setUpdateOverview,
 }) => {
   const [showAddFood, setShowAddFood] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState("Breakfast");
@@ -41,6 +42,7 @@ const FoodList = ({
               userID={userID}
               itemID={item.id}
               setForceTrigger={setForceTrigger}
+              setUpdateOverview={setUpdateOverview}
             />
           );
         }}
@@ -87,7 +89,6 @@ const FoodList = ({
         setTotalCalories={setTotalCalories}
         selectedDay={selectedDay}
         userID={userID}
-
       />
     </>
   );

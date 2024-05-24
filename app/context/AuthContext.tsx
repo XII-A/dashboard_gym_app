@@ -32,6 +32,8 @@ interface AuthProps {
   onLogout?: () => Promise<void>;
   updateSchedule?: boolean;
   setUpdateSchedule?: React.Dispatch<React.SetStateAction<boolean>>;
+  updateOverview?: boolean;
+  setUpdateOverview?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TOKEN_KEY = "my-jwt";
@@ -53,10 +55,15 @@ export const AuthProvider = ({ children }: any) => {
   });
   const [authLoading, setAuthLoading] = useState(true);
   const [user, setUser] = useState(null);
-  const [updateSchedule, setUpdateSchedule] = useState(false);
   //   useEffect(() => {
   //     console.log("the auth state in context: ", authState);
   //   }, [authState]);
+
+  // states for updating pages after changes
+  // updating the schedule page after adding a new workout
+  const [updateSchedule, setUpdateSchedule] = useState(false);
+  // updating the overview page after doing a workout or a new meal
+  const [updateOverview, setUpdateOverview] = useState(false);
 
   useEffect(() => {
     const loadToken = async () => {
@@ -155,6 +162,8 @@ export const AuthProvider = ({ children }: any) => {
     user,
     updateSchedule,
     setUpdateSchedule,
+    updateOverview,
+    setUpdateOverview,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

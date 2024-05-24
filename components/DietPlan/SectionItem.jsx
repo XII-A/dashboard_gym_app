@@ -14,6 +14,7 @@ const SectionItem = ({
   userID,
   itemID,
   setForceTrigger,
+  setUpdateOverview,
 }) => {
   const [checked, setChecked] = useState(false);
   const [deleted, setDeleted] = useState(false);
@@ -37,6 +38,7 @@ const SectionItem = ({
     })
       .then((res) => {
         setChecked(true);
+        setUpdateOverview((prev) => !prev);
         setTimeout(() => {
           setChecked(false);
         }, 800);

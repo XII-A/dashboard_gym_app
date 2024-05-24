@@ -10,7 +10,7 @@ import { convert24to12, getDate } from "../../utils/timeUtils";
 import ListItem from "./ListItem";
 import { useRouter } from "expo-router";
 
-const Routine = ({ key, userID, updateSchedule }) => {
+const Routine = ({ key, userID, updateSchedule, setUpdateOverview }) => {
   const [selectedDay, setSelectedDay] = useState(
     new Date().toLocaleString("en-us", { weekday: "long" })
   );
@@ -57,6 +57,7 @@ const Routine = ({ key, userID, updateSchedule }) => {
                 item={item}
                 userID={userID}
                 setFilteredSchedule={setFilteredSchedule}
+                setUpdateOverview={setUpdateOverview}
               />
             )}
             keyExtractor={(item) => item.id}

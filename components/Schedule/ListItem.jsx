@@ -7,7 +7,7 @@ import AntDesign from "@expo/vector-icons/AntDesign";
 import { convert24to12, getDate } from "../../utils/timeUtils";
 import axios from "axios";
 
-const ListItem = ({ item, userID, setFilteredSchedule }) => {
+const ListItem = ({ item, userID, setFilteredSchedule, setUpdateOverview }) => {
   const [checked, setChecked] = useState(false);
   const [deleted, setDeleted] = useState(false);
   const handleAddBurnedCalories = async () => {
@@ -51,6 +51,7 @@ const ListItem = ({ item, userID, setFilteredSchedule }) => {
         },
       }).then((res) => {
         setChecked(false);
+        setUpdateOverview((prev) => !prev);
       });
     } catch (e) {
       console.log("Error in adding burned calories:", e);

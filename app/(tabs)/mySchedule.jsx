@@ -14,7 +14,7 @@ const MySchedule = () => {
     { key: "second", title: "Courses" },
   ]);
 
-  const { user, updateSchedule } = useAuth();
+  const { user, updateSchedule, setUpdateOverview } = useAuth();
 
   const [opacity, setOpacity] = useState(0);
 
@@ -39,7 +39,12 @@ const MySchedule = () => {
           setOpacity(e.nativeEvent.offset);
         }}
       >
-        <Routine key="1" userID={user.id} updateSchedule={updateSchedule} />
+        <Routine
+          key="1"
+          userID={user.id}
+          updateSchedule={updateSchedule}
+          setUpdateOverview={setUpdateOverview}
+        />
         <Courses key="2" />
       </PagerView>
     </SafeAreaView>

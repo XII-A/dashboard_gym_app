@@ -18,7 +18,7 @@ const days = [
 ];
 
 const DietPlan = () => {
-  const { user } = useAuth();
+  const { user, setUpdateOverview } = useAuth();
 
   const [selectedDay, setSelectedDay] = useState(null);
 
@@ -138,6 +138,7 @@ const DietPlan = () => {
             setTotalCalories={setTotalCalories}
             setFoodList={setFoodList}
             selectedDay={selectedDay}
+            setUpdateOverview={setUpdateOverview}
           />
         </View>
       )}
