@@ -6,7 +6,7 @@ import {
   Platform,
   Alert,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FormFieldProfile from "./FormFieldProfile";
 import CustomButton from "./CustomButton";
 import { router } from "expo-router";
@@ -51,14 +51,11 @@ const ProfileData = ({}) => {
 
   const [formValues, setFormValues] = useState({
     email: user.email,
-    // password: user.password,
-    // confirmPassword: user.confirmPassword,
+    image: user.profilepicUrl,
     firstName: user.name,
     lastName: user.surname,
-    weight: user.weight + "",
-    height: user.height + "",
-    gymId: user.gymId,
-    gymName: user.gymName,
+    weight: user.weight.toString(),
+    height: user.height.toString(),
     birthDate: user.birthday,
     stepsGoal: user.stepsGoal,
     caloriesGoal: user.caloriesGoal,
@@ -67,9 +64,11 @@ const ProfileData = ({}) => {
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    setSelectedImage(user.profilepicUrl);
+  }, [user]);
 
-  const gymOptions = gyms.map((gym) => gym.attributes.name);
+  const [isLoading, setIsLoading] = useState(false);
 
   const pickImage = async () => {
     // No permissions request is necessary for launching the image library
@@ -78,7 +77,6 @@ const ProfileData = ({}) => {
       aspect: [1, 1],
       quality: 0.2,
     });
-
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
     }
@@ -115,51 +113,14 @@ const ProfileData = ({}) => {
     }
   };
 
-  const handleConfirm = async () => {
-    setIsLoading(true);
-    try {
-      const imageUrl = await uploadImage(
-        selectedImage,
-        formValues.email,
-        setIsLoading
-      );
-      setFormValues((prev) => {
-        return {
-          ...prev,
-          profilePic: imageUrl,
-        };
-      });
-      const jsonUser = JSON.stringify(user);
-      const res = await axios({
-        url: `${process.env.EXPO_PUBLIC_API_URL}/auth/local/register`,
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        data: jsonUser,
-      })
-        .then((res) => {
-          // log in the user after signing up then redirect to the overview page
+  const handleConfirm = async () => {};
 
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(
-            "error in confirming .catch: ",
-            err.response.data.error.message
-          );
-          Alert.alert(err.response.data.error.message);
-          setIsLoading(false);
-        });
-    } catch (error) {
-      console.log("error in confirming: ", error);
-      Alert.alert("Something went wrong, please try again");
-      setIsLoading(false);
-    }
-  };
+  useEffect(() => {
+    console.log("formValues", formValues);
+  }, [formValues]);
 
   return (
-    <View className="p-4 w-full">
+    <View className="w-full">
       <View className="w-full flex justify-center items-center relative ">
         <View className="relative">
           <TouchableOpacity onPress={pickImage}>
@@ -174,24 +135,6 @@ const ProfileData = ({}) => {
         </View>
       </View>
 
-      {/* form */}
-      <FormFieldProfile
-        title="Email"
-        value={formValues.email}
-        handleChange={(e) =>
-          setFormValues((prev) => {
-            return {
-              ...prev,
-              email: e,
-            };
-          })
-        }
-        inputMode={"email"}
-        otherStyles="mt-4"
-        placeholder={user.email}
-        keyboardType="email-address"
-      />
-
       <FormFieldProfile
         title={"First Name"}
         value={formValues.firstName}
@@ -203,7 +146,7 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-t border-[#64748bd9] px-4 mt-4"
         placeholder={user.firstName}
       />
       <FormFieldProfile
@@ -217,7 +160,7 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-t border-[#64748bd9] px-4"
         placeholder={formValues.lastName}
       />
       <FormFieldProfile
@@ -231,7 +174,7 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-t border-[#64748bd9] px-4"
         placeholder={"formValues.weight"}
         inputMode={"numeric"}
       />
@@ -246,7 +189,7 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-t border-[#64748bd9] px-4"
         placeholder={"170"}
         inputMode={"numeric"}
       />
@@ -261,7 +204,7 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-t border-[#64748bd9] px-4"
         placeholder={formValues.stepsGoal}
         inputMode={"numeric"}
       />
@@ -276,7 +219,7 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-t border-[#64748bd9] px-4"
         placeholder={formValues.caloriesGoal}
         inputMode={"numeric"}
       />
@@ -291,7 +234,7 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-t border-[#64748bd9] px-4"
         placeholder={formValues.workoutGoal}
         inputMode={"numeric"}
       />
@@ -308,22 +251,15 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="mt-4"
+        otherStyles="border-y border-[#64748bd9] px-4"
         placeholder={formValues.birthDate}
       />
 
-      <View className="flex flex-row justify-center">
+      <View className="flex flex-row justify-center px-4 mt-4 h-24">
         <CustomButton
           title={"Confirm"}
-          containerStyles="p-4 m-4"
+          containerStyles="p-4 w-full h-12"
           handlePress={handleConfirm}
-          isLoading={isLoading}
-        />
-
-        <CustomButton
-          title={"Log Out"}
-          containerStyles="p-4 m-4"
-          handlePress={onLogout}
           isLoading={isLoading}
         />
       </View>
