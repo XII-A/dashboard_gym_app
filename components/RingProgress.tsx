@@ -27,10 +27,10 @@ const RightArrow = (props: SvgProps) => (
 );
 
 const RingProgress = ({
-  radius = Dimensions.get("window").width >= 395 ? 100 : 92,
+  radius = 86,
   progress,
   strokeWidth = 34,
-  strokeColor = "#017EA7",
+  strokeColor = "#03a6dc",
 }: RingProgressProps) => {
   const innerRadius = radius - strokeWidth / 2;
   const circumference = 2 * Math.PI * innerRadius;

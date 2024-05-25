@@ -187,8 +187,8 @@ const Overview = () => {
               titles={workoutTitles}
               value={workoutsValues}
               otherStyles="mt-2 items-center"
-              textColor="text-[#9b71ff]"
-              strokeColor="#9b71ff"
+              textColor="text-[#b062ff]"
+              strokeColor="#cc33ff"
               workoutGoal={user.workoutsGoal}
               progress={workoutsValues[0] / user.workoutsGoal}
             />
@@ -202,8 +202,6 @@ const Overview = () => {
               caloriesGoal={user.caloriesGoal}
               textColor="text-[#F97316]"
               strokeColor="#F97316"
-              radius={60}
-              strokeWidth={24}
             />
           )}
         </ScrollView>
