@@ -1,15 +1,29 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React from "react";
-import { useAuth } from "../context/AuthContext";
-// currently unused
+import { SafeAreaView } from "react-native-safe-area-context";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ProfileData from "../../components/ProfileData";
+
 const Profile = () => {
-  const { onLogout } = useAuth();
   return (
-    <View className="flex items-center justify-center h-full bg-blue-400">
-      <TouchableOpacity onPress={onLogout}>
-        <Text className="text-white">LogOut</Text>
-      </TouchableOpacity>
-    </View>
+    <SafeAreaView className="bg-bgColor-primary flex-1">
+      <View className="height-full">
+        <View className="flex flex-row justify-between items-center py-2">
+          <Text className="text-2xl font-manropeBold text-white my-2 px-4">
+            Personal Details
+          </Text>
+        </View>
+        <ScrollView>
+          <View className="h-full bg-bgColor-primary flex ">
+            <View className="h-full flex flex-col py-2 bg-bgColor-trinary/80">
+              <View className="flex flex-row justify-between items-center py-2">
+                <ProfileData />
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 

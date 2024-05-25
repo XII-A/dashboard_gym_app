@@ -18,10 +18,10 @@ interface AuthProps {
     name: string;
     surname: string;
     birthday: string;
-    weight: number;
+    weight: number | string;
     user_id: string;
     profilepicUrl: string;
-    height: number;
+    height: number | string;
     caloriesGoal: number | string;
     workoutsGoal: number | string;
     stepsGoal: number | string;
