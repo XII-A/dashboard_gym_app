@@ -17,6 +17,7 @@ const MySchedule = () => {
   const { user, updateSchedule, setUpdateOverview } = useAuth();
 
   const [opacity, setOpacity] = useState(0);
+  const [position, setPosition] = useState(0);
 
   const pagerRef = useRef(null);
 
@@ -29,6 +30,7 @@ const MySchedule = () => {
         setIndex={setIndex}
         pagerRef={pagerRef}
         opacity={opacity}
+        position={position}
       />
       <PagerView
         style={{ flex: 1 }}
@@ -37,6 +39,7 @@ const MySchedule = () => {
         ref={pagerRef}
         onPageScroll={(e) => {
           setOpacity(e.nativeEvent.offset);
+          setPosition(e.nativeEvent.position);
         }}
       >
         <Routine
