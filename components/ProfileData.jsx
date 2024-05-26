@@ -115,12 +115,8 @@ const ProfileData = ({}) => {
 
   const handleConfirm = async () => {};
 
-  useEffect(() => {
-    console.log("formValues", formValues);
-  }, [formValues]);
-
   return (
-    <View className="w-full">
+    <View className="w-full bg-bgColor-trinary/80 py-4 h-full flex flex-col">
       <View className="w-full flex justify-center items-center relative ">
         <View className="relative">
           <TouchableOpacity onPress={pickImage}>
@@ -146,8 +142,8 @@ const ProfileData = ({}) => {
             };
           })
         }
-        otherStyles="border-t border-[#64748bd9] px-4 mt-4"
-        placeholder={user.firstName}
+        otherStyles="border-t border-[#64748bd9] px-4 mt-6"
+        placeholder={"Jhon"}
       />
       <FormFieldProfile
         title={"Last Name"}
@@ -161,7 +157,7 @@ const ProfileData = ({}) => {
           })
         }
         otherStyles="border-t border-[#64748bd9] px-4"
-        placeholder={formValues.lastName}
+        placeholder={"Doe"}
       />
       <FormFieldProfile
         title={"Weight (kg)"}
@@ -175,7 +171,7 @@ const ProfileData = ({}) => {
           })
         }
         otherStyles="border-t border-[#64748bd9] px-4"
-        placeholder={"formValues.weight"}
+        placeholder={"70"}
         inputMode={"numeric"}
       />
       <FormFieldProfile
@@ -205,7 +201,7 @@ const ProfileData = ({}) => {
           })
         }
         otherStyles="border-t border-[#64748bd9] px-4"
-        placeholder={formValues.stepsGoal}
+        placeholder={"10000"}
         inputMode={"numeric"}
       />
       <FormFieldProfile
@@ -220,7 +216,7 @@ const ProfileData = ({}) => {
           })
         }
         otherStyles="border-t border-[#64748bd9] px-4"
-        placeholder={formValues.caloriesGoal}
+        placeholder={"2000"}
         inputMode={"numeric"}
       />
       <FormFieldProfile
@@ -235,7 +231,7 @@ const ProfileData = ({}) => {
           })
         }
         otherStyles="border-t border-[#64748bd9] px-4"
-        placeholder={formValues.workoutGoal}
+        placeholder={"3"}
         inputMode={"numeric"}
       />
 
@@ -252,10 +248,10 @@ const ProfileData = ({}) => {
           })
         }
         otherStyles="border-y border-[#64748bd9] px-4"
-        placeholder={formValues.birthDate}
+        placeholder={"01/01/2000"}
       />
 
-      <View className="flex flex-row justify-center px-4 mt-4 h-24">
+      <View className="flex flex-row justify-center px-4 mt-6 ">
         <CustomButton
           title={"Confirm"}
           containerStyles="p-4 w-full h-12"

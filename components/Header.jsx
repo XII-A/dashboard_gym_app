@@ -1,8 +1,10 @@
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity } from "react-native";
 import React from "react";
 import { icons } from "../constants";
+import { useRouter } from "expo-router";
 
 const Header = ({ date, user }) => {
+  const router = useRouter();
   return (
     <View className="flex flex-row justify-between items-center my-2">
       <View className="flex flex-col items-start gap-2">
@@ -13,34 +15,40 @@ const Header = ({ date, user }) => {
           Overview
         </Text>
       </View>
-      <View className="">
-        {/* user's icon */}
-        {user?.profilepicUrl !== null ? (
-          <Image
-            source={{ uri: user?.profilepicUrl }}
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 50,
-            }}
-          />
-        ) : (
-          <View
-            className="bg-bgColor-trinary/80 rounded-full items-center justify-center"
-            style={{ width: 50, height: 50 }}
-          >
+      <TouchableOpacity
+        onPress={() => {
+          router.push("profile");
+        }}
+      >
+        <View>
+          {/* user's icon */}
+          {user?.profilepicUrl !== null ? (
             <Image
-              source={icons.person}
+              source={{ uri: user?.profilepicUrl }}
               style={{
-                width: 35,
-                height: 35,
+                width: 50,
+                height: 50,
+                borderRadius: 50,
               }}
-              resizeMode="contain"
-              tintColor={"#fff"}
             />
-          </View>
-        )}
-      </View>
+          ) : (
+            <View
+              className="bg-bgColor-trinary/80 rounded-full items-center justify-center"
+              style={{ width: 50, height: 50 }}
+            >
+              <Image
+                source={icons.person}
+                style={{
+                  width: 35,
+                  height: 35,
+                }}
+                resizeMode="contain"
+                tintColor={"#fff"}
+              />
+            </View>
+          )}
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };

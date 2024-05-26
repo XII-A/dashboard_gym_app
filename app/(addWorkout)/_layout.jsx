@@ -21,6 +21,7 @@ const AddWorkOutLayout = () => {
             headerTitleStyle: {
               fontFamily: "ManropeBold",
             },
+            headerTitleAlign: "center",
             // add a button to go back to the previous screen
             headerLeft: () => {
               return (

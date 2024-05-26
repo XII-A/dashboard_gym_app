@@ -4,6 +4,7 @@ import { Stack, SplashScreen } from "expo-router";
 import { useFonts } from "expo-font";
 import { AuthProvider } from "./context/AuthContext";
 import "react-native-reanimated";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 SplashScreen.preventAutoHideAsync();
 
 const RootLayout = () => {
@@ -30,32 +31,40 @@ const RootLayout = () => {
   }
   return (
     <AuthProvider>
-      <Stack>
-        <Stack.Screen
-          name="index"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(auth)"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(tabs)"
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="(addWorkout)"
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Stack>
+      <ActionSheetProvider>
+        <Stack>
+          <Stack.Screen
+            name="index"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(auth)"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(tabs)"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(addWorkout)"
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="(profile)"
+            options={{
+              headerShown: false,
+            }}
+          />
+        </Stack>
+      </ActionSheetProvider>
     </AuthProvider>
   );
 };

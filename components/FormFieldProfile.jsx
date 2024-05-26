@@ -246,16 +246,19 @@ const FormFieldProfile = ({
 
     default:
       return (
-        <View className={`flex flex-row justify-between py-4 ${otherStyles}`}>
+        <View
+          className={`flex flex-row justify-between items-center py-4  ${otherStyles}`}
+        >
           <Text className="text-base text-white font-manropeMedium">
             {title}
           </Text>
-          <View className="flex flex-row text-blue-text focus:border-blue-default">
+          <View className="flex flex-row text-blue-text focus:border-blue-default  items-center">
             <TextInput
-              className=" text-blue-text font-manropeSemiBold text-base"
+              className=" text-blue-text font-manropeSemiBold text-base min-w-[50px] max-w-[200px] "
+              textAlign="right"
               value={value}
               placeholder={placeholder}
-              placeholderTextColor={"#00a8e8"}
+              placeholderTextColor={"#64748bd9"}
               onChangeText={handleChange}
               secureTextEntry={title === "Password" && !showPassword}
               keyboardType={keyboardType}
