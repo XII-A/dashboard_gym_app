@@ -1,11 +1,4 @@
-import {
-  View,
-  Image,
-  TouchableOpacity,
-  ActionSheetIOS,
-  Platform,
-  Alert,
-} from "react-native";
+import { View, Image, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import FormFieldProfile from "./FormFieldProfile";
 import CustomButton from "./CustomButton";
@@ -41,17 +34,11 @@ const ImageViewer = ({ src }) => {
 };
 
 const ProfileData = ({}) => {
-  const { onLogin } = useAuth();
-
-  const { onLogout } = useAuth();
-
-  const { user } = useAuth();
-
-  const [gyms, setGyms] = useState([]);
+  const { user, setUpdateProfile, getMe } = useAuth();
 
   const [formValues, setFormValues] = useState({
     email: user.email,
-    image: user.profilepicUrl,
+    profilepicUrl: user.profilepicUrl,
     firstName: user.name,
     lastName: user.surname,
     weight: user.weight.toString(),
@@ -80,6 +67,18 @@ const ProfileData = ({}) => {
     if (!result.canceled) {
       setSelectedImage(result.assets[0].uri);
     }
+    // upload image to firebase
+    const downloadUrl = await uploadImage(
+      result.assets[0].uri,
+      user.email,
+      setIsLoading
+    );
+    setFormValues((prev) => {
+      return {
+        ...prev,
+        profilepicUrl: downloadUrl,
+      };
+    });
   };
 
   const uploadImage = async (uri, userEmail, setIsLoading) => {
@@ -98,7 +97,10 @@ const ProfileData = ({}) => {
         xhr.open("GET", uri, true);
         xhr.send(null);
       });
-      const imageRef = ref(storage, `ProfilePics/${userEmail}`);
+      const imageRef = ref(
+        storage,
+        `ProfilePics/${userEmail}/${Math.random()}`
+      );
       const downloadUrl = await uploadBytes(imageRef, blob).then(
         async (snapshot) => {
           const url = await getDownloadURL(imageRef);
@@ -113,7 +115,62 @@ const ProfileData = ({}) => {
     }
   };
 
-  const handleConfirm = async () => {};
+  const handleDisabled = () => {
+    if (
+      formValues.profilepicUrl == user.profilepicUrl &&
+      formValues.firstName == user.name &&
+      formValues.lastName == user.surname &&
+      formValues.weight == user.weight.toString() &&
+      formValues.height == user.height.toString() &&
+      formValues.birthDate == user.birthday &&
+      formValues.stepsGoal == user.stepsGoal &&
+      formValues.caloriesGoal == user.caloriesGoal &&
+      formValues.workoutGoal == user.workoutsGoal
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  useEffect(() => {
+    if (!handleDisabled()) {
+      setUpdateProfile(true);
+    } else {
+      setUpdateProfile(false);
+    }
+  }, [formValues]);
+
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    try {
+      axios({
+        method: "PUT",
+        url: `${process.env.EXPO_PUBLIC_API_URL}/users/${user.id}`,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        data: {
+          name: formValues.firstName,
+          surname: formValues.lastName,
+          weight: formValues.weight,
+          height: formValues.height,
+          birthday: formValues.birthDate,
+          stepsGoal: formValues.stepsGoal,
+          caloriesGoal: formValues.caloriesGoal,
+          workoutsGoal: formValues.workoutGoal,
+          profilepicUrl: formValues.profilepicUrl,
+        },
+      }).then((res) => {
+        getMe(); // update the user context
+        setUpdateProfile(false);
+        setIsLoading(false);
+        router.back();
+      });
+    } catch (err) {
+      console.log("error updating profile: ", err);
+    }
+  };
 
   return (
     <View className="w-full bg-bgColor-trinary/80 py-4 h-full flex flex-col">
@@ -257,6 +314,7 @@ const ProfileData = ({}) => {
           containerStyles="p-4 w-full h-12"
           handlePress={handleConfirm}
           isLoading={isLoading}
+          isDisabled={handleDisabled()}
         />
       </View>
     </View>

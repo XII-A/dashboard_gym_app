@@ -30,10 +30,13 @@ interface AuthProps {
   onRegister?: (email: string, password: string) => Promise<void>;
   onLogin?: (email: string, password: string) => Promise<void>;
   onLogout?: () => Promise<void>;
+  getMe?: () => Promise<void>;
   updateSchedule?: boolean;
   setUpdateSchedule?: React.Dispatch<React.SetStateAction<boolean>>;
   updateOverview?: boolean;
   setUpdateOverview?: React.Dispatch<React.SetStateAction<boolean>>;
+  updateProfile?: boolean;
+  setUpdateProfile?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TOKEN_KEY = "my-jwt";
@@ -64,6 +67,8 @@ export const AuthProvider = ({ children }: any) => {
   const [updateSchedule, setUpdateSchedule] = useState(false);
   // updating the overview page after doing a workout or a new meal
   const [updateOverview, setUpdateOverview] = useState(false);
+  // checking if the user has made a change to his data in profile page and wants to leave before saving the changes
+  const [updateProfile, setUpdateProfile] = useState(false);
 
   useEffect(() => {
     const loadToken = async () => {
@@ -98,6 +103,23 @@ export const AuthProvider = ({ children }: any) => {
     try {
       return await axios.post(`${API_URL}/register`, { email, password });
     } catch (error) {
+      return error;
+    }
+  };
+
+  const getMe = async () => {
+    try {
+      const res = await axios({
+        url: `${API_URL}/users/me`,
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      setUser(res.data);
+      return;
+    } catch (error) {
+      console.log("error in getMe in context", error);
       return error;
     }
   };
@@ -164,6 +186,9 @@ export const AuthProvider = ({ children }: any) => {
     setUpdateSchedule,
     updateOverview,
     setUpdateOverview,
+    updateProfile,
+    setUpdateProfile,
+    getMe,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

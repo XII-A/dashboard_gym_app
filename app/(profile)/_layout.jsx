@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthContext";
 const ProfilePageLayout = () => {
   const router = useRouter();
   const { showActionSheetWithOptions } = useActionSheet();
-  const { onLogout } = useAuth();
+  const { onLogout, updateProfile } = useAuth();
   const onPress = () => {
     const options = ["Logout", "Cancel"];
     const destructiveButtonIndex = 0;
@@ -31,6 +31,32 @@ const ProfilePageLayout = () => {
     );
   };
 
+  const onBack = () => {
+    // if the updateProfile is true, then some changes have been made and are unsaved
+    if (updateProfile) {
+      const options = ["Discard", "Cancel"];
+      const destructiveButtonIndex = 0;
+      const cancelButtonIndex = 1;
+      showActionSheetWithOptions(
+        {
+          options,
+          cancelButtonIndex,
+          destructiveButtonIndex,
+          userInterfaceStyle: "dark",
+          title: "Discard changes?",
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 0) {
+            router.back();
+          }
+        }
+      );
+    } else {
+      // if no changes have been made, go back to the previous screen
+      router.back();
+    }
+  };
+
   return (
     <>
       <Stack>
@@ -48,12 +74,11 @@ const ProfilePageLayout = () => {
               fontSize: 20,
             },
             headerTitleAlign: "center",
-            // add a button to go back to the previous screen
             headerLeft: () => {
               return (
                 <TouchableOpacity
                   onPress={() => {
-                    router.back();
+                    onBack();
                   }}
                 >
                   <View className="flex justify-center items-center mr-2">
