@@ -11,18 +11,18 @@ import { getDayFromDate, getWeek } from "../../utils/timeUtils";
 import WeekSelector from "../../components/shared/WeekSelector";
 
 const daysOfWeek = [
-  "Sunday",
   "Monday",
   "Tuesday",
   "Wednesday",
   "Thursday",
   "Friday",
   "Saturday",
+  "Sunday",
 ];
 const Progress = () => {
   const [selectedRange, setSelectedRange] = useState(getWeek());
 
-  const { user } = useAuth();
+  const { user, updateOverview } = useAuth();
 
   const [weeklyCalories, setWeeklyCalories] = useState([]);
   const [loadingCalories, setLoadingCalories] = useState(true);
@@ -178,7 +178,7 @@ const Progress = () => {
       setLoadingBurnedCalories(false);
       setRefreshing(false);
     }
-  }, [selectedRange]);
+  }, [selectedRange, updateOverview]);
 
   return (
     <SafeAreaView className="bg-bgColor-primary flex-1">
