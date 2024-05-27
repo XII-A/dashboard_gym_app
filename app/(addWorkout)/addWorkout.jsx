@@ -260,7 +260,15 @@ const addWorkout = () => {
             }}
             containerStyles="mt-4"
             isLoading={loading}
-            isDisabled={loading}
+            isDisabled={
+              !formValues.workoutName ||
+              !formValues.duration ||
+              !formValues.caloriesPerHour ||
+              !formValues.time ||
+              !formValues.day ||
+              !formValues.workoutImageUrl ||
+              loading
+            }
           />
           <View className="h-28" />
         </KeyboardAwareScrollView>
