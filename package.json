@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "start": "expo start --dev-client",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "ts:check": "tsc --noEmit"
   },
@@ -32,6 +32,7 @@
     "react": "18.2.0",
     "react-native": "0.74.1",
     "react-native-gifted-charts": "^1.4.10",
+    "react-native-health-connect": "^2.0.3",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-pager-view": "6.3.0",
     "react-native-reanimated": "3.10.0",
@@ -39,7 +40,9 @@
     "react-native-screens": "3.31.1",
     "react-native-svg": "15.2.0",
     "react-native-tab-view": "^3.5.2",
-    "typescript": "~5.3.3"
+    "typescript": "~5.3.3",
+    "expo-build-properties": "~0.12.1",
+    "expo-dev-client": "~4.0.14"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
