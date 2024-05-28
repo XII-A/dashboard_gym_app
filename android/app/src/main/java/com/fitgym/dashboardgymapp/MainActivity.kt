@@ -10,13 +10,21 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate
 
 import expo.modules.ReactActivityDelegateWrapper
 
+import dev.matinzd.healthconnect.permissions.HealthConnectPermissionDelegate
+
+import android.util.Log
+
+
 class MainActivity : ReactActivity() {
   override fun onCreate(savedInstanceState: Bundle?) {
     // Set the theme to AppTheme BEFORE onCreate to support
     // coloring the background, status bar, and navigation bar.
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
-    super.onCreate(null)
+    super.onCreate(savedInstanceState)
+    // In order to handle permission contract results, we need to set the permission delegate.
+    HealthConnectPermissionDelegate.setPermissionDelegate(this)
+    Log.d("MainActivity", "HealthConnectPermissionDelegate initialized")
   }
 
   /**

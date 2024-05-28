@@ -7,7 +7,9 @@ import axios from "axios";
 import Header from "../../components/Header";
 import InfoBox from "../../components/InfoBox";
 import { getDate } from "../../utils/timeUtils";
+// @ts-ignore
 import { useAuth } from "../context/AuthContext";
+import useHealth from "../../hooks/useHealth";
 
 const Overview = () => {
   const { user, updateOverview } = useAuth();
@@ -15,7 +17,7 @@ const Overview = () => {
   const titles = ["Steps", "Calories", "Distance"];
   const [stepsLoading, setStepsLoading] = useState(true);
   const [values, setValues] = useState([]);
-  const [steps, setSteps] = useState(null);
+  const [stepsDB, setSteps] = useState(null);
 
   const [workoutLoading, setWorkoutLoading] = useState(true);
   const workoutTitles = ["Workout hrs", "Last Workout"];
@@ -25,6 +27,9 @@ const Overview = () => {
   const [calories, setCalories] = useState(null);
 
   const [refreshing, setRefreshing] = useState(false);
+
+  const [steps] = useHealth();
+
   const onRefresh = async () => {
     setRefreshing(true);
     await getSteps();
@@ -145,7 +150,7 @@ const Overview = () => {
     // console.log("steps", steps);
     // console.log("workoutsValues", workoutsValues);
     // console.log("calories", calories);
-  }, [steps, workoutsValues, calories]);
+  }, [stepsDB, workoutsValues, calories]);
 
   // getting the current date in the format of "Day, Month Date"
   const date = new Date().toLocaleDateString("en-US", {
@@ -177,7 +182,7 @@ const Overview = () => {
             <InfoBox
               titles={titles}
               value={values}
-              progress={steps ? steps / user.stepsGoal : 0}
+              progress={stepsDB ? stepsDB / user.stepsGoal : 0}
               stepsGoal={user.stepsGoal}
               otherStyles="items-center"
             />
