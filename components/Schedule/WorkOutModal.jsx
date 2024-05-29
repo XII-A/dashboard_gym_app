@@ -100,7 +100,7 @@ const WorkOutModal = ({
           setValue={setValue}
           handleSearch={handleSearch}
           loading={loading}
-          placeholder="Search for food"
+          placeholder="Search for Workout"
           outSideRef={outSideRef}
         />
         {/* search results */}
