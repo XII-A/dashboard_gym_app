@@ -110,9 +110,9 @@ const SecoundStep = ({ formValues, setFromValues, gyms, onLogin }) => {
         },
         data: jsonUser,
       })
-        .then((res) => {
+        .then(async (res) => {
           // log in the user after signing up then redirect to the overview page
-          onLogin(formValues.email, formValues.password);
+          await onLogin(formValues.email, formValues.password);
           router.replace("/overview");
           setIsLoading(false);
         })

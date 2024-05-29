@@ -71,7 +71,7 @@ const Overview = () => {
     try {
       const res = await axios({
         method: "GET",
-        url: `${process.env.EXPO_PUBLIC_API_URL}/workouts?filters[$and][0][date][$eq]=${date}&filters[$and][1][member][id][$eq]=${user.id}&sort=createdAt:desc`,
+        url: `${process.env.EXPO_PUBLIC_API_URL}/workouts?filters[$and][0][date][$eq]=${date}&filters[$and][1][member][id][$eq]=${user?.id}&sort=createdAt:desc`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -105,7 +105,7 @@ const Overview = () => {
     try {
       const res = await axios({
         method: "GET",
-        url: `${process.env.EXPO_PUBLIC_API_URL}/calories?filters[$and][0][date][$eq]=${date}&filters[$and][1][member][id][$eq]=${user.id}&filters[$and][2][isBurnedCalories][$eq]=false`,
+        url: `${process.env.EXPO_PUBLIC_API_URL}/calories?filters[$and][0][date][$eq]=${date}&filters[$and][1][member][id][$eq]=${user?.id}&filters[$and][2][isBurnedCalories][$eq]=false`,
         headers: {
           "Content-Type": "application/json",
         },
@@ -177,8 +177,8 @@ const Overview = () => {
             <InfoBox
               titles={titles}
               value={values}
-              progress={steps ? steps / user.stepsGoal : 0}
-              stepsGoal={user.stepsGoal}
+              progress={steps ? steps / user?.stepsGoal : 0}
+              stepsGoal={user?.stepsGoal}
               otherStyles="items-center"
             />
           )}
@@ -189,8 +189,8 @@ const Overview = () => {
               otherStyles="mt-2 items-center"
               textColor="text-[#b062ff]"
               strokeColor="#cc33ff"
-              workoutGoal={user.workoutsGoal}
-              progress={workoutsValues[0] / user.workoutsGoal}
+              workoutGoal={user?.workoutsGoal}
+              progress={workoutsValues[0] / user?.workoutsGoal}
             />
           )}
           {!caloriesLoading && (
@@ -198,8 +198,8 @@ const Overview = () => {
               titles={["Calories"]}
               value={[calories]}
               otherStyles="mt-2 items-center"
-              progress={calories / user.caloriesGoal}
-              caloriesGoal={user.caloriesGoal}
+              progress={calories / user?.caloriesGoal}
+              caloriesGoal={user?.caloriesGoal}
               textColor="text-[#F97316]"
               strokeColor="#F97316"
             />

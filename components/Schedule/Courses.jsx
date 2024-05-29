@@ -12,22 +12,24 @@ const Courses = ({ key }) => {
   const [coursesLoading, setCoursesLoading] = useState(true);
 
   const [upcomingCourses, setUpcomingCourses] = useState([]);
-  const [upcomingCoursesLoading, setUpcomingCoursesLoading] = useState(true);
+  const [upcomingCoursesLoading, setUpcomingCoursesLoading] = useState(false);
 
   const [coursesList, setCoursesList] = useState([]);
 
+  const [forceUpdate, setForceUpdate] = useState(false);
+
   const getUpcomingCourses = async () => {
     const date = getDate();
+    setUpcomingCoursesLoading(true);
     await axios({
       method: "GET",
-      url: `${process.env.EXPO_PUBLIC_API_URL}/courses?filters[$and][0][attendees][id][$contains]=${user.id}&filters[$and][1][date][$gt]=${date}`,
+      url: `${process.env.EXPO_PUBLIC_API_URL}/courses?filters[$and][0][attendees][email][$contains]=${user.email}&filters[$and][1][date][$gt]=${date}`,
       headers: {
         "Content-Type": "application/json",
       },
     })
       .then((res) => {
         setUpcomingCourses(res.data.data);
-        setUpcomingCoursesLoading(false);
       })
       .then(async () => {
         await axios({
@@ -41,17 +43,19 @@ const Courses = ({ key }) => {
             setCourses(res.data.data);
           })
           .catch((error) => {
-            console.log("Error in getting upcoming courses:", error);
+            console.log("Error in getting upcoming courses:", {
+              ...error,
+            });
           });
       })
       .catch((error) => {
-        console.log("Error in getting upcoming courses:", error);
+        console.log("Error in getting upcoming courses catch:", error);
       });
   };
 
   useEffect(() => {
     getUpcomingCourses();
-  }, []);
+  }, [forceUpdate]);
 
   useEffect(() => {
     let upcomingCoursesList = {
@@ -69,6 +73,7 @@ const Courses = ({ key }) => {
       data: filteredCourses,
     };
     setCoursesList([upcomingCoursesList, bookCourseList]);
+    setUpcomingCoursesLoading(false);
   }, [courses]);
 
   return (
@@ -77,6 +82,8 @@ const Courses = ({ key }) => {
         coursesList={coursesList}
         userID={user.id}
         setCoursesList={setCoursesList}
+        setForceUpdate={setForceUpdate}
+        refreshing={upcomingCoursesLoading}
       />
     </View>
   );

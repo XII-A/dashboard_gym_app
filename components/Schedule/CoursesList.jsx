@@ -1,4 +1,11 @@
-import { View, Text, SectionList, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  SectionList,
+  Image,
+  TouchableOpacity,
+  RefreshControl,
+} from "react-native";
 import { convert24to12, getDate } from "../../utils/timeUtils";
 import React, { useEffect, useState } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
@@ -90,7 +97,13 @@ const sectionHeader = (title) => {
   );
 };
 
-const CoursesList = ({ coursesList, userID, setCoursesList }) => {
+const CoursesList = ({
+  coursesList,
+  userID,
+  setCoursesList,
+  setForceUpdate,
+  refreshing,
+}) => {
   const handleBookCourse = async (courseId) => {
     try {
       await axios({
@@ -154,6 +167,16 @@ const CoursesList = ({ coursesList, userID, setCoursesList }) => {
       ItemSeparatorComponent={() => {
         return <View className="mt-2" />;
       }}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={() => {
+            setForceUpdate((prev) => !prev);
+          }}
+          colors={["#00A8E8", "#9b71ff", "#F97316"]}
+          tintColor={"#00A8E8"}
+        />
+      }
     />
   );
 };

@@ -53,11 +53,11 @@ const Progress = () => {
       }).then((res) => {
         const calories = [];
         daysOfWeek.forEach((day) => {
-          const dayCalories = res.data.find((item) => {
+          const dayCalories = res.data.rows.find((item) => {
             return getDayFromDate(item.date) === day;
           });
           if (dayCalories) {
-            calories.push(dayCalories.total_calories);
+            calories.push(parseInt(dayCalories.total_calories));
           } else {
             calories.push(0);
           }
@@ -84,7 +84,7 @@ const Progress = () => {
       }).then((res) => {
         const workouts = [];
         daysOfWeek.forEach((day) => {
-          const dayWorkouts = res.data.find((item) => {
+          const dayWorkouts = res.data.rows.find((item) => {
             return getDayFromDate(item.date) === day;
           });
           if (dayWorkouts) {
@@ -115,7 +115,7 @@ const Progress = () => {
       }).then((res) => {
         const steps = [];
         daysOfWeek.forEach((day) => {
-          const daySteps = res.data.find((item) => {
+          const daySteps = res.data.rows.find((item) => {
             return getDayFromDate(item.date) === day;
           });
           if (daySteps) {
@@ -146,7 +146,7 @@ const Progress = () => {
       }).then((res) => {
         const burnedCalories = [];
         daysOfWeek.forEach((day) => {
-          const dayBurnedCalories = res.data.find((item) => {
+          const dayBurnedCalories = res.data.rows.find((item) => {
             return getDayFromDate(item.date) === day;
           });
           if (dayBurnedCalories) {

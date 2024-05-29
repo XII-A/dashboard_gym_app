@@ -84,14 +84,13 @@ export const AuthProvider = ({ children }: any) => {
               "Content-Type": "application/json",
             },
           });
-
           setUser(getUser.data);
           setAuthLoading(false);
         } else {
           setAuthLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        console.log("error in loadToken in context", error);
         setAuthLoading(false);
       }
     };
